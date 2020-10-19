@@ -50,7 +50,7 @@ namespace sgf
 
             SDL_RenderPresent(renderer);
 
-            //TODO: use time to determine delay!!!!!!!!!!!!
+            //TODO: Chrono za SDL_Delay
             SDL_Delay(25);
         }
     }

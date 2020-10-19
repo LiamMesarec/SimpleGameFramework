@@ -2,6 +2,7 @@
 #include "SGF/Core.hpp"
 #include "SGF/Gui.hpp"
 #include "SGF/Math.hpp"
+#include "Scene2.hpp"
 
 class TestScene : public sgf::Scene 
 {
@@ -14,18 +15,16 @@ public:
     void HandleInput() override;
 
 private:
-    sgf::gui::Triangle triangle{
-        {100, 400}, {500, 200}, {300, 100}, 
-        {0, 0, 0, 0}, false
+    sgf::Polygon polygon {
+        sgf::Vertex{50, 500}, sgf::Vertex{150, 500}, sgf::Vertex{150, 600}, sgf::Vertex{50, 600}
     };
 
-    sgf::gui::Triangle triangle2{
-        {300, 700}, {800, 500}, {400, 400}, 
-        {0, 0, 0, 0}, false
+    sgf::Polygon polygon2 {
+        sgf::Vertex{200, 200}, sgf::Vertex{500, 200}, sgf::Vertex{400, 400}, sgf::Vertex{200, 400}
     };
 
-    sgf::gui::Rectangle rectangle{
-        {100, 200}, {200, 200}, {100, 100}, {200, 100},
-        {200, 250, 120, 0}, false
+    sgf::Polygon desno {
+        sgf::Vertex{100, 200}, sgf::Vertex{300, 200}, sgf::Vertex{400, 150}, 
+        sgf::Vertex{300, 100}, sgf::Vertex{100, 100}, sgf::Vertex{200, 150}
     };
 };

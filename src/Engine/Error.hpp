@@ -19,4 +19,6 @@ namespace sgf::error
     void GetSDLError(const char* message);
     template<Type E>
     void GetSDLError(const std::string& message);
+
+    void Exception(const char* function, const char* message);
 }

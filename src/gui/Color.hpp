@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sgf::gui
+namespace sgf
 {
     struct Color
     {

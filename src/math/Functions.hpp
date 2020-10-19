@@ -1,10 +1,6 @@
 #pragma once
 
-namespace sgf::math
+namespace sgf
 {
-    template<typename T>
-    auto sqrt(T toSqr) -> decltype(toSqr*toSqr)
-    {
-        return toSqr*toSqr;
-    }
+    
 }

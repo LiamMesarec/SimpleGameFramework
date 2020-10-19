@@ -2,12 +2,13 @@
 #include "SDL2/SDL.h"
 #include "../Engine/Error.hpp"
 
-namespace sgf::gui
+namespace sgf
 {
     class Texture
     {
     public:
         Texture(const std::string& path);
+        Texture(){}
         ~Texture();
     private:
         bool LoadImage(const std::string& path);

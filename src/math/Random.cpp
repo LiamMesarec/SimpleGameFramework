@@ -1,7 +1,7 @@
 #include <random>
 #include "Random.hpp"
 
-namespace sgf::math
+namespace sgf
 {
     namespace 
     {

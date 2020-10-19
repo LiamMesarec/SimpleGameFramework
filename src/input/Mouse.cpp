@@ -1,11 +1,11 @@
 #include "Mouse.hpp"
 #include <iostream>
 
-namespace sgf::input
+namespace sgf
 {
-    math::Vertex Mouse::GetPosition()
+    Vertex Mouse::GetPosition()
     {
-        math::Vertex pos = {0, 0};
+        Vertex pos = {0, 0};
 
         SDL_GetMouseState(&pos.x, &pos.y);
 

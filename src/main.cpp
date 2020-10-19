@@ -1,7 +1,5 @@
 #include <SDL2/SDL.h>
-#include <memory>
 #include "Engine/Engine.hpp"
-#include <iostream>
 #include "TestScene.hpp"
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])

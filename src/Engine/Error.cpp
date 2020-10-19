@@ -38,4 +38,9 @@ namespace sgf::error
     {
         std::cout << "SDL_image ERROR: Could not load image: " << message << " " << IMG_GetError();
     }
+
+    void Exception(const char* function, const char* message)
+	{
+		std::cerr << '\n' << "ERROR IN FUNCTION: " << function << " " << message << '\n';
+	}
 }

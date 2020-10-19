@@ -2,36 +2,27 @@
 #include <iostream>
 #include <memory>
 
-TestScene::TestScene([[maybe_unused]] sgf::SceneManagerPtr scene)
+Scene2::Scene2([[maybe_unused]] sgf::SceneManagerPtr scene)
 {
     polygon.SetColor({100, 100, 100, 100});
-    polygon2.SetColor({200, 200, 100, 100});
 }
 
-TestScene::~TestScene()
+Scene2::~Scene2()
 {
     
 }
 
-void TestScene::Render()
+void Scene2::Render()
 {
     polygon.Draw();
-    polygon2.Draw();
-    desno.Draw();
 }
 
-void TestScene::Update()
+void Scene2::Update()
 {
-    desno.Move(1, 0);
 
-    if(sgf::ObjectCollision::Collided(polygon, polygon2))
-    {
-        polygon.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
-        desno.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
-    }
 }
 
-void TestScene::HandleInput()
+void Scene2::HandleInput()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -50,11 +41,8 @@ void TestScene::HandleInput()
                 sgf::Engine::CloseWindow();
                 break;
             case SDLK_LEFT:
-                sgf::Engine::OpenScene<Scene2>();
-                break;
-            /*case SDLK_LEFT:
                     polygon.Move(-5, 0); 
-                break;*/
+                break;
             case SDLK_RIGHT:
                     polygon.Move(5, 0); 
                 break;
@@ -70,13 +58,9 @@ void TestScene::HandleInput()
         if(event.type == SDL_MOUSEBUTTONDOWN)
         {
             if(polygon.Clicked())
+            {
                 polygon.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
-
-            if(polygon2.Clicked())
-                polygon2.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
-            
-            if(desno.Clicked())
-                desno.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sgf::math
+namespace sgf
 {
     int Random(int lowerBound, int upperBound);
 }

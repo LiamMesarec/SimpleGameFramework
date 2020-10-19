@@ -8,34 +8,34 @@
 
 namespace sgf
 {
-    bool ObjectCollision::Collided(int obj1ID, int obj2ID)
+    bool ObjectCollision::Collided(Polygon& polygon1, Polygon& polygon2)
     {
-        std::vector<math::Vertex>* obj1Vertices = &ObjectManager::objects.at(obj1ID);
-        std::vector<math::Vertex>* obj2Vertices = &ObjectManager::objects.at(obj2ID);
+        std::vector<Vertex>* obj1Vertices = &polygon1.GetVertices();
+        std::vector<Vertex>* obj2Vertices = &polygon2.GetVertices();
 
 		for (int shape = 0; shape < 2; shape++)
 		{
 			if (shape == 1)
 			{
-				obj1Vertices = &ObjectManager::objects.at(obj2ID);
-				obj2Vertices = &ObjectManager::objects.at(obj1ID);
+				obj1Vertices = &polygon2.GetVertices();
+				obj2Vertices = &polygon1.GetVertices();
 			}
 		
-			for (int a = 0; a < obj1Vertices->size(); a++)
+			for (unsigned long long int a = 0; a < obj1Vertices->size(); a++)
 			{
 				int b = (a + 1) % obj1Vertices->size();
-				math::Vertex &pa = obj1Vertices->at(a);
-				math::Vertex &pb = obj1Vertices->at(b);
+				Vertex &pa = obj1Vertices->at(a);
+				Vertex &pb = obj1Vertices->at(b);
 				
-				math::Vertex dir = {pb.x - pa.x, pb.y - pa.y};
-				math::Vertex n = {-dir.y, dir.x};
+				Vertex dir = {pb.x - pa.x, pb.y - pa.y};
+				Vertex n = {-dir.y, dir.x};
 				float d = -(n.x*pa.x + n.y*pa.y);
 
-				int p;
+				unsigned long long int p;
 
 				for (p = 0; p < obj2Vertices->size(); p++)
 				{
-					const auto &pt = obj2Vertices->at(p);
+					Vertex &pt = obj2Vertices->at(p);
 					float dist = n.x * pt.x + n.y * pt.y + d;
 
 					if (dist < 0)

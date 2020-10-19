@@ -1,6 +1,6 @@
 #include "Vector.hpp"
 
-namespace sgf::math
+namespace sgf
 {
     int DotProduct(Vertex first, Vertex second)
     {

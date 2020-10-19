@@ -3,7 +3,7 @@
 #include "../Engine/Error.hpp"
 #include "SDL2/SDL_image.h"
 
-namespace sgf::gui
+namespace sgf
 {
 
     Texture::Texture(const std::string& path)
@@ -16,8 +16,8 @@ namespace sgf::gui
 
     Texture::~Texture()
     {
-        SDL_DestroyTexture(m_texture);
-        m_texture = nullptr;
+        //SDL_DestroyTexture(m_texture);
+        //m_texture = nullptr;
     }
 
     bool Texture::LoadImage(const std::string& path)

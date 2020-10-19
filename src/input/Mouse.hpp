@@ -2,12 +2,12 @@
 #include "../math/Vector.hpp"
 #include <SDL2/SDL.h>
 
-namespace sgf::input
+namespace sgf
 {
     class Mouse
     {
     public:
-        static math::Vertex GetPosition();
+        static Vertex GetPosition();
     private:
         
     };

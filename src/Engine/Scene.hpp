@@ -13,7 +13,6 @@ namespace sgf
         virtual void Render() = 0;
         virtual void Update() = 0;
         virtual void HandleInput() = 0;
-
     protected:
 	    SceneManagerPtr scene;
     };
