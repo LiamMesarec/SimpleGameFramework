@@ -8,7 +8,7 @@ namespace sgf
 
     }
 
-    void Polygon::SetVertex(unsigned __int64 position, Vertex vertex)
+    void Polygon::SetVertex(std::size_t position, Vertex vertex)
     {
         try
         {
@@ -47,7 +47,7 @@ namespace sgf
         int minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
         Vertex* vertices = new Vertex[m_vertices.size()];
 
-        for (unsigned __int64 i = 0; i < m_vertices.size(); i++) 
+        for (std::size_t i = 0; i < m_vertices.size(); i++) 
         {
             vertices[i] = Vertex(m_vertices[i].x, m_vertices[i].y);
             if (vertices[i].x > maxX) maxX = vertices[i].x;
@@ -111,7 +111,7 @@ namespace sgf
 
         int winding = 0;
 
-        for(unsigned __int64 i = 0; i < m_vertices.size() - 1; i++)
+        for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
         {
             if(m_vertices.at(i+1).y == v.y)
             {
@@ -170,7 +170,7 @@ namespace sgf
     {
         SDL_Point* vertices = new SDL_Point[m_vertices.size()];
 
-        for(unsigned __int64 i = 0; i < m_vertices.size(); i++)
+        for(std::size_t i = 0; i < m_vertices.size(); i++)
         {
             vertices[i] = { m_vertices.at(i).x, m_vertices.at(i).y};
         }   
@@ -259,14 +259,14 @@ namespace sgf
         SDL_Point** triangles = new SDL_Point*[m_vertices.size() + 1];
         SDL_Point centerCoords = {GetCenterCoords().x, GetCenterCoords().y};
 
-        for(unsigned __int64 i = 0; i < m_vertices.size() - 1; i++)
+        for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
         {
             triangles[i] = new SDL_Point[2];
             triangles[i][0] = {m_vertices.at(i).x, m_vertices.at(i).y};
             triangles[i][1] = {m_vertices.at(i + 1).x, m_vertices.at(i + 1).y};
         }
 
-        for(unsigned __int64 i = 0; i < m_vertices.size() - 1; i++)
+        for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
         {
             FillTriangle(triangles[i][0], triangles[i][1], {centerCoords.x, centerCoords.y});
         }

@@ -19,6 +19,10 @@ private:
         sgf::Vertex{50, 500}, sgf::Vertex{150, 500}, sgf::Vertex{150, 600}, sgf::Vertex{50, 600}
     };
 
+    sgf::Polygon trikotnik {
+        sgf::Vertex{600, 500}, sgf::Vertex{800, 500}, sgf::Vertex{750, 600}
+    };
+    
     sgf::Polygon polygon2 {
         sgf::Vertex{200, 200}, sgf::Vertex{500, 200}, sgf::Vertex{400, 400}, sgf::Vertex{200, 400}
     };

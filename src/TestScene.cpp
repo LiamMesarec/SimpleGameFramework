@@ -6,6 +6,7 @@ TestScene::TestScene([[maybe_unused]] sgf::SceneManagerPtr scene)
 {
     polygon.SetColor({100, 100, 100, 100});
     polygon2.SetColor({200, 200, 100, 100});
+    trikotnik.SetColor(sgf::color::red);
 }
 
 TestScene::~TestScene()
@@ -18,17 +19,12 @@ void TestScene::Render()
     polygon.Draw();
     polygon2.Draw();
     desno.Draw();
+    trikotnik.Draw();
 }
 
 void TestScene::Update()
 {
     desno.Move(1, 0);
-
-    if(sgf::ObjectCollision::Collided(polygon, polygon2))
-    {
-        polygon.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
-        desno.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
-    }
 }
 
 void TestScene::HandleInput()
@@ -49,12 +45,12 @@ void TestScene::HandleInput()
             case SDLK_ESCAPE:
                 sgf::Engine::CloseWindow();
                 break;
-            case SDLK_LEFT:
+            case SDLK_TAB:
                 sgf::Engine::OpenScene<Scene2>();
                 break;
-            /*case SDLK_LEFT:
+            case SDLK_LEFT:
                     polygon.Move(-5, 0); 
-                break;*/
+                break;
             case SDLK_RIGHT:
                     polygon.Move(5, 0); 
                 break;
@@ -70,7 +66,7 @@ void TestScene::HandleInput()
         if(event.type == SDL_MOUSEBUTTONDOWN)
         {
             if(polygon.Clicked())
-                polygon.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
+                polygon.Move(sgf::Random(-5, 20), sgf::Random(-20, 5));
 
             if(polygon2.Clicked())
                 polygon2.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
