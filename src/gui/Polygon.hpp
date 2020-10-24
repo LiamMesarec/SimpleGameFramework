@@ -33,7 +33,7 @@ namespace sgf
             m_vertices.insert(m_vertices.end(), { args... });
             m_vertices.push_back(vertex);
         }
-        void SetVertex(unsigned __int64, Vertex vertex);
+        void SetVertex(std::size_t position, Vertex vertex);
         void SetPosition(int x, int y);
         void SetTransparency(bool transparency);
         void SetColor(Color color);

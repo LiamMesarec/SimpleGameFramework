@@ -23,6 +23,10 @@ private:
         sgf::Vertex{600, 500}, sgf::Vertex{800, 500}, sgf::Vertex{750, 600}
     };
     
+    //sgf::Polygon circle {
+    //    sgf::Vertex{500, 100, sgf::Curve{50}}, sgf::Vertex{700, 100, sgf::Curve{-50}}
+    //};
+
     sgf::Polygon polygon2 {
         sgf::Vertex{200, 200}, sgf::Vertex{500, 200}, sgf::Vertex{400, 400}, sgf::Vertex{200, 400}
     };

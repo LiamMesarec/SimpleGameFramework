@@ -36,7 +36,7 @@ namespace sgf
     SDL_Texture* Texture::LoadTexture(const std::string& path)
     {
         SDL_Texture* newTexture = NULL;
-        SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+        SDL_Surface* loadedSurface = nullptr; //IMG_Load(path.c_str());
 
         if(loadedSurface == nullptr)
         {

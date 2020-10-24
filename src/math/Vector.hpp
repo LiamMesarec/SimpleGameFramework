@@ -1,7 +1,13 @@
 #pragma once
+#include <vector>
 
 namespace sgf
 {
+    enum class LineType
+    {
+        STRAIGHT, ARC
+    };
+
     struct Vertex
     {
         int x, y;
@@ -13,6 +19,11 @@ namespace sgf
         int x2, y2;
 
         int magnitude;
+    };
+
+    struct Arc
+    {
+        std::vector<Vertex> vertices;
     };
 
     int DotProduct(Vertex first, Vertex second);
