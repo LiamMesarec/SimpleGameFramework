@@ -4,3 +4,6 @@
 #include "../Engine/SceneManager.hpp"
 #include "../Engine/ObjectManager.hpp"
 #include "../Engine/ObjectCollision.hpp"
+#include "../Engine/Window.hpp"
+#include "../Engine/Resolution.hpp"
+#include "../Engine/Camera.hpp"

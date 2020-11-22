@@ -2,7 +2,7 @@
 #include <vector>
 #include "../math/Vector.hpp"
 #include "Color.hpp"
-#include "Texture.hpp"
+#include "TextureManager.hpp"
 #include <iostream>
 #include "../Engine/Error.hpp"
 #include "../Engine/Engine.hpp"
@@ -14,7 +14,7 @@ namespace sgf
     {
     public:
         template<typename ...Args>
-        Polygon(Vertex vertex, Args ...args) noexcept : m_isDeleted{false}
+        Polygon(Vertex vertex, Args ...args) noexcept : m_isDeleted{false}, m_texturePath{""}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
@@ -38,7 +38,8 @@ namespace sgf
         void SetTransparency(bool transparency);
         void SetColor(Color color);
         void SetOutline();
-        void SetTexture(Texture texture);
+        void SetTexture(std::string path);
+        void DeleteTexture();
 
         Vertex GetCenterCoords();
         int GetID() const;
@@ -62,8 +63,9 @@ namespace sgf
         int m_ID;
         std::vector<Vertex> m_vertices;
         Color m_color;
-        Texture m_texture;
         bool m_transparency;
         bool m_isDeleted;
+        std::string m_texturePath;
+        SDL_Rect m_textureRect;
     };
 }

@@ -5,26 +5,19 @@ namespace sgf
 {
     enum class LineType
     {
-        STRAIGHT, ARC
+        STRAIGHT, CURVE
     };
 
     struct Vertex
     {
         int x, y;
+        LineType type = LineType::STRAIGHT;  
     };
 
-    struct Vector
+    struct Curve
     {
-        int x1, y1;
-        int x2, y2;
-
-        int magnitude;
+        Vertex startVertex;
+        Vertex endVertex;
+        Vertex middlePoint;
     };
-
-    struct Arc
-    {
-        std::vector<Vertex> vertices;
-    };
-
-    int DotProduct(Vertex first, Vertex second);
 }

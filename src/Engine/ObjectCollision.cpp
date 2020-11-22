@@ -21,7 +21,7 @@ namespace sgf
 				obj2Vertices = &polygon1.GetVertices();
 			}
 		
-			for (unsigned long long int a = 0; a < obj1Vertices->size(); a++)
+			for (std::size_t a = 0; a < obj1Vertices->size(); a++)
 			{
 				int b = (a + 1) % obj1Vertices->size();
 				Vertex &pa = obj1Vertices->at(a);
@@ -31,7 +31,7 @@ namespace sgf
 				Vertex n = {-dir.y, dir.x};
 				float d = -(n.x*pa.x + n.y*pa.y);
 
-				unsigned long long int p;
+				std::size_t p;
 
 				for (p = 0; p < obj2Vertices->size(); p++)
 				{

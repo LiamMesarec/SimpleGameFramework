@@ -6,7 +6,7 @@ namespace sgf
 {
     class SceneManager;
     using SceneManagerPtr = std::shared_ptr<SceneManager>;
-    
+
     class Scene
     {
     public:

@@ -1,12 +1,12 @@
 #include <SDL2/SDL.h>
-#include "Engine/Engine.hpp"
+#include "SGF/Core.hpp"
 #include "TestScene.hpp"
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
-    sgf::Engine::CreateWindow(sgf::Resolution::R_720P, "igra");
+    sgf::Window::Create(sgf::R_720P, "igra");
     sgf::Engine::OpenScene<TestScene>();
-    sgf::Engine::CloseWindow();
+    sgf::Window::Close();
 
     return 0;
 }

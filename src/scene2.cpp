@@ -19,7 +19,7 @@ void Scene2::Render()
 
 void Scene2::Update()
 {
-
+    
 }
 
 void Scene2::HandleInput()
@@ -29,7 +29,7 @@ void Scene2::HandleInput()
     {
         if (event.type == SDL_QUIT)
         {
-            sgf::Engine::CloseWindow();
+            sgf::Window::Close();
             break;
         }
 
@@ -38,7 +38,7 @@ void Scene2::HandleInput()
             switch (event.key.keysym.sym)
             {
             case SDLK_ESCAPE:
-                sgf::Engine::CloseWindow();
+                sgf::Window::Close();
                 break;
             case SDLK_LEFT:
                     polygon.Move(-5, 0); 

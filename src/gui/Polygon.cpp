@@ -75,9 +75,14 @@ namespace sgf
 
     }
 
-    void Polygon::SetTexture(Texture texture)
+    void Polygon::SetTexture(std::string path)
     {
+        m_texturePath = path;
+    }
 
+    void Polygon::DeleteTexture()
+    {
+        m_texturePath = "";
     }
 
     int Polygon::GetID() const
@@ -182,11 +187,34 @@ namespace sgf
             m_color.b,
             m_color.a
         );
-        SDL_RenderDrawLines(sgf::Engine::renderer, vertices, m_vertices.size());
 
         if(!m_transparency)
         {
-            Fill();
+            if(!(m_texturePath.length() > 0))
+            {
+                SDL_RenderDrawLines(Engine::renderer, vertices, m_vertices.size());
+                Fill();
+            }
+            else 
+            {   
+                int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
+                int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
+
+                for(auto&& vertex : m_vertices)
+                {
+                    if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
+                    if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
+                    if(highestVertexY < vertex.y) highestVertexY = vertex.y;
+                    if(highestVertexX < vertex.x) highestVertexX = vertex.x;
+                }
+
+                m_textureRect.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
+                m_textureRect.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
+                m_textureRect.h = highestVertexY - lowestVertexY; 
+                m_textureRect.w = highestVertexX - lowestVertexX;
+
+	            SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_texturePath), NULL, &m_textureRect);
+            }
         }
 
         delete[] vertices;

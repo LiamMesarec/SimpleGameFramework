@@ -3,8 +3,11 @@
 #include <memory>
 
 TestScene::TestScene([[maybe_unused]] sgf::SceneManagerPtr scene)
-{
+{   
+
+    //sgf::Camera::SetSize(1920, 1080);
     polygon.SetColor({100, 100, 100, 100});
+    polygon.SetTexture("src/textures/forest.png");
     polygon2.SetColor({200, 200, 100, 100});
     trikotnik.SetColor(sgf::color::red);
 }
@@ -25,6 +28,10 @@ void TestScene::Render()
 void TestScene::Update()
 {
     desno.Move(1, 0);
+    if(sgf::ObjectCollision::Collided(polygon, desno))
+    {
+        std::cout << "fax";
+    }
 }
 
 void TestScene::HandleInput()
@@ -34,7 +41,7 @@ void TestScene::HandleInput()
     {
         if (event.type == SDL_QUIT)
         {
-            sgf::Engine::CloseWindow();
+            sgf::Window::Close();
             break;
         }
 
@@ -43,7 +50,7 @@ void TestScene::HandleInput()
             switch (event.key.keysym.sym)
             {
             case SDLK_ESCAPE:
-                sgf::Engine::CloseWindow();
+                sgf::Window::Close();
                 break;
             case SDLK_TAB:
                 sgf::Engine::OpenScene<Scene2>();
