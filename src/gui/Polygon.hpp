@@ -14,7 +14,7 @@ namespace sgf
     {
     public:
         template<typename ...Args>
-        Polygon(Vertex vertex, Args ...args) noexcept : m_isDeleted{false}, m_texturePath{""}
+        Polygon(Vertex vertex, Args ...args) noexcept :  m_ID{-1}, m_isDeleted{false}, m_textureID{-1}, m_texturePath{""}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
@@ -23,7 +23,7 @@ namespace sgf
             m_ID = ObjectManager::NewObject(m_vertices);
         }
 
-        Polygon(){}
+        Polygon() noexcept : m_ID{-1}, m_isDeleted{false}, m_textureID{-1}, m_texturePath{""} {}
         ~Polygon();
         template<typename ...Args>
         void SetVertices(Vertex vertex, Args ...args)
@@ -32,6 +32,11 @@ namespace sgf
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
             m_vertices.push_back(vertex);
+
+            if(m_ID < 0) 
+            {
+                m_ID = ObjectManager::NewObject(m_vertices);
+            }
         }
         void SetVertex(std::size_t position, Vertex vertex);
         void SetPosition(int x, int y);
@@ -63,8 +68,11 @@ namespace sgf
         int m_ID;
         std::vector<Vertex> m_vertices;
         Color m_color;
+
         bool m_transparency;
         bool m_isDeleted;
+
+        int m_textureID;
         std::string m_texturePath;
         SDL_Rect m_textureRect;
     };

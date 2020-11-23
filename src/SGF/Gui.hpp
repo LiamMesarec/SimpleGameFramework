@@ -4,3 +4,4 @@
 #include "../gui/TextureManager.hpp"
 #include "../gui/Triangle.hpp"
 #include "../gui/Color.hpp"
+#include "../gui/Grid.hpp"

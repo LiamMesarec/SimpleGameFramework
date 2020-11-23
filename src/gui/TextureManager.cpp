@@ -7,14 +7,16 @@ namespace sgf
 {
     void TextureManager::Init()
     {
-        for(auto rit = m_textures.rbegin(); rit != m_textures.rend(); rit++) 
+        for(auto& texture : m_textures) 
         {
-            SDL_DestroyTexture(*rit);
-            m_textures.pop_back();
+            SDL_DestroyTexture(texture.second);
         }
+
+        m_textures.clear();
+        m_ID = 0;
     }
 
-    SDL_Texture* TextureManager::LoadTexture(const std::string& path)
+    int TextureManager::NewTexture(const std::string& path)
     {
         SDL_Texture* newTexture = nullptr;
         SDL_Surface* loadedSurface = IMG_Load(path.c_str());
@@ -34,6 +36,19 @@ namespace sgf
             SDL_FreeSurface(loadedSurface);
         }
 
-        return newTexture;
+        m_textures.emplace(m_ID, newTexture);
+        m_ID++;
+        return m_ID - 1;
+    }
+
+    SDL_Texture* TextureManager::LoadTexture(int ID)
+    {
+        return m_textures.at(ID);
+    }
+
+    void TextureManager::DeleteTexture(int ID)
+    {
+        SDL_DestroyTexture(m_textures.at(ID));
+        m_textures.erase(ID);
     }
 }

@@ -39,7 +39,7 @@ namespace sgf
                 continue;
             }
             
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(renderer, 0, 191, 255, 50);
             SDL_RenderClear(renderer);
 
             GetCurrentScene()->HandleInput();

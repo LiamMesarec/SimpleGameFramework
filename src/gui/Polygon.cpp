@@ -77,12 +77,15 @@ namespace sgf
 
     void Polygon::SetTexture(std::string path)
     {
+        if(m_textureID > -1) TextureManager::DeleteTexture(m_textureID);
         m_texturePath = path;
+        m_textureID = TextureManager::NewTexture(path);
     }
 
     void Polygon::DeleteTexture()
     {
         m_texturePath = "";
+        TextureManager::DeleteTexture(m_textureID);
     }
 
     int Polygon::GetID() const
@@ -213,7 +216,7 @@ namespace sgf
                 m_textureRect.h = highestVertexY - lowestVertexY; 
                 m_textureRect.w = highestVertexX - lowestVertexX;
 
-	            SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_texturePath), NULL, &m_textureRect);
+	            SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), NULL, &m_textureRect);
             }
         }
 

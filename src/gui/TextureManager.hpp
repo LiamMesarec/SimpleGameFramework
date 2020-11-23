@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL2/SDL.h>
-#include <vector>
+#include <unordered_map>
 #include <string>
 
 namespace sgf
@@ -9,11 +9,11 @@ namespace sgf
     {
     public:
         static void Init();
-        static SDL_Texture* LoadTexture(const std::string& path);
-        
+        static int NewTexture(const std::string& path);
+        static SDL_Texture* LoadTexture(int ID);
+        static void DeleteTexture(int ID);
     private:
-        static inline int m_ID = 0;
-        static inline std::vector<SDL_Texture*> m_textures;
-        static inline SDL_Texture* m_texture = nullptr;
+        inline static int m_ID = 0;
+        inline static std::unordered_map<int, SDL_Texture*> m_textures;
     };
 }

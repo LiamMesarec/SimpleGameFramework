@@ -6,7 +6,6 @@ TestScene::TestScene([[maybe_unused]] sgf::SceneManagerPtr scene)
 {   
 
     //sgf::Camera::SetSize(1920, 1080);
-    polygon.SetColor({100, 100, 100, 100});
     polygon.SetTexture("src/textures/forest.png");
     polygon2.SetColor({200, 200, 100, 100});
     trikotnik.SetColor(sgf::color::red);
@@ -19,10 +18,11 @@ TestScene::~TestScene()
 
 void TestScene::Render()
 {
-    polygon.Draw();
     polygon2.Draw();
     desno.Draw();
     trikotnik.Draw();
+    polygon.Draw();
+    board.Draw();
 }
 
 void TestScene::Update()

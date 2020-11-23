@@ -7,3 +7,4 @@
 #include "../Engine/Window.hpp"
 #include "../Engine/Resolution.hpp"
 #include "../Engine/Camera.hpp"
+#include "../Engine/EventManager.hpp"
