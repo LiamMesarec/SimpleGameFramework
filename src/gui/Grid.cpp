@@ -16,6 +16,23 @@ namespace sgf
         CreateBoard();
     }
 
+    Polygon* Grid::Square(int ID)
+    {
+        try
+        {
+            if(ID < 0 || static_cast<std::size_t>(ID) > (m_squareCount - 1))
+            {
+                throw(ID);
+            }
+        }
+        catch(int exception)
+        {
+            error::Exception("Grid::Square", "Argument 'ID' is out of bounds.", ID);
+        }
+
+        return &m_polygons[ID];
+    }
+
     void Grid::SetHeight(int height) 
     {
         m_height = height;
@@ -67,7 +84,7 @@ namespace sgf
 
         int posX = 0;
         int posY = 0;
-        for(int i = 0; i < m_squareCount; i++)
+        for(std::size_t i = 0; i < m_squareCount; i++)
         {
             m_polygons[i].SetVertices(
                 Vertex{m_position.x + posX, m_position.y + posY},
@@ -87,9 +104,17 @@ namespace sgf
 
     void Grid::Draw()
     {
-        for(int i = 0; i < m_squareCount; i++)
+        for(std::size_t i = 0; i < m_squareCount; i++)
         {
             m_polygons[i].Draw();
+        }
+    }
+
+    void Grid::Delete()
+    {
+        for(std::size_t i = 0; i < m_squareCount; i++)
+        {
+            m_polygons[i].Delete();
         }
     }
 }

@@ -5,6 +5,7 @@
 #include "Scene.hpp"
 #include "ObjectManager.hpp"
 #include "../gui/TextureManager.hpp"
+#include <any>
 
 namespace sgf
 {
@@ -18,6 +19,21 @@ namespace sgf
             ObjectManager::Init();
             TextureManager::Init();
             m_engine->OpenScene(std::make_unique<T>(m_engine));
+
+            if(!m_loop)
+            {
+                m_loop = true;
+                m_engine->Loop(renderer);
+            }
+        }
+
+        template<typename T, typename ...Args>
+        static void OpenScene(Args&&... args)
+        {   
+            ObjectManager::Init();
+            TextureManager::Init();
+
+            m_engine->OpenScene(std::make_unique<T>(m_engine, std::forward<Args>(args)...));
 
             if(!m_loop)
             {

@@ -7,7 +7,10 @@ namespace sgf
     {
         KeyPressed = SDL_KEYDOWN, 
         KeyReleased = SDL_KEYUP, 
-        MouseInput, 
+        MouseMoved = SDL_MOUSEMOTION,
+        MousePressed = SDL_MOUSEBUTTONDOWN,
+        MouseReleased = SDL_MOUSEBUTTONUP,
+        MouseWheelMoved = SDL_MOUSEWHEEL,
         Quit
     };
 
@@ -28,6 +31,12 @@ namespace sgf
         SingleQuote = SDLK_QUOTE,
         LeftParentheses = SDLK_LEFTPAREN,
         RightParantheses = SDLK_RIGHTPAREN
+    };
+
+    enum Mouse
+    {
+        LeftClick,
+        RightClick
     };
 
     class EventManager

@@ -1,6 +1,7 @@
 #pragma once
 #include "../SGF/Core.hpp"
 #include "../SGF/Gui.hpp"
+#include "Bot.hpp"
 
 class TicTacToe : public sgf::Scene 
 {
@@ -13,5 +14,8 @@ public:
     void HandleInput() override;
 
 private:
-    sgf::Grid board{20, 20, 10, 10, sgf::Vertex{0, 0}};
+    sgf::Grid board{200, 200, 3, 3, sgf::Vertex{300, 50}};
+    Square squares[9] = {Square::none};
+    bool winFlag;
+    Bot bot;
 };

@@ -1,4 +1,5 @@
 #include "SceneManager.hpp"
+#include "Window.hpp"
 
 namespace sgf
 {
@@ -39,7 +40,13 @@ namespace sgf
                 continue;
             }
             
-            SDL_SetRenderDrawColor(renderer, 0, 191, 255, 50);
+            SDL_SetRenderDrawColor(renderer, 
+                Window::GetBackgroundColor().r, 
+                Window::GetBackgroundColor().g,
+                Window::GetBackgroundColor().b,
+                Window::GetBackgroundColor().a
+            );
+
             SDL_RenderClear(renderer);
 
             GetCurrentScene()->HandleInput();

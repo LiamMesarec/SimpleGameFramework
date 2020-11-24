@@ -7,7 +7,7 @@ namespace sgf::error
 {
     enum class Type
     {
-        IMAGE
+        IMAGE, TTF
     };
 
     void GetSDLError(const std::string& message);
@@ -20,5 +20,5 @@ namespace sgf::error
     template<Type E>
     void GetSDLError(const std::string& message);
 
-    void Exception(const char* function, const char* message);
+    void Exception(const char* function, const char* message, int value);
 }

@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Error.hpp"
 #include "Camera.hpp"
+#include <SDL2/SDL_ttf.h>
 
 namespace sgf 
 {
@@ -32,6 +33,11 @@ namespace sgf
             return;
         }
         SDL_SetRenderDrawColor(Engine::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+        if(TTF_Init() < 0) {
+            error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
+            return;
+        }
     }
 
     void Window::Create(Resolution res, const std::string& name)
@@ -60,6 +66,11 @@ namespace sgf
             return;
         }
         SDL_SetRenderDrawColor(Engine::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        
+        if(TTF_Init() < 0) {
+            error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
+            return;
+        }
     }
 
     void Window::Close()
@@ -67,6 +78,21 @@ namespace sgf
         SDL_DestroyRenderer(Engine::renderer);
         SDL_DestroyWindow(m_window);
         SDL_Quit();
+    }
+
+    void Window::SetBackgroundColor(Color color)
+    {
+        m_color = color;
+    }
+
+    void Window::RemoveBackgroundColor()
+    {
+        m_color = color::noColor;
+    }
+
+    Color Window::GetBackgroundColor()
+    {
+        return m_color;
     }
 
     void Window::SetSize(int width, int height)

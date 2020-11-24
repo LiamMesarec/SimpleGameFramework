@@ -1,6 +1,7 @@
 #pragma once
 #include "Polygon.hpp"
 #include "../math/Vector.hpp"
+#include <functional>
 
 namespace sgf
 {
@@ -8,7 +9,13 @@ namespace sgf
     {
     public:
         Grid(int squareHeight, int squareWidth, int height, int width, Vertex position);
-        Polygon& Square(int ID);
+
+        Polygon* Square(int ID);
+
+        Polygon* begin() { return &m_polygons[0]; };
+        const Polygon* begin() const { return &m_polygons[0]; };
+        Polygon* end() { return &m_polygons[m_squareCount]; };
+        const Polygon* end() const { return &m_polygons[m_squareCount]; };
 
         void SetHeight(int height);
         void SetWidth(int width);
@@ -16,8 +23,10 @@ namespace sgf
         void SetSquareWidth(int squareWidth);
         void SetPosition();
         void Move();
-        void Draw();
         
+        void Draw();
+        void Delete();
+
         int GetHeight() const;
         int GetWidth() const;
         int GetSquareHeight() const;
@@ -29,11 +38,11 @@ namespace sgf
         void ResizeBoardWidth();
 
         Polygon* m_polygons;
-        int m_height;
-        int m_width;
+        std::size_t m_height;
+        std::size_t m_width;
         int m_squareHeight;
         int m_squareWidth;
-        int m_squareCount;
+        std::size_t m_squareCount;
         Vertex m_position;
     };
 }

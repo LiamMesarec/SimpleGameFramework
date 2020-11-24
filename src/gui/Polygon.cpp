@@ -5,7 +5,15 @@ namespace sgf
 {
     Polygon::~Polygon()
     {
-
+        if(!m_isDeleted)
+        {
+            ObjectManager::DeleteObject(m_ID);
+        }
+        
+        if(m_textureID != -1)
+        {
+            TextureManager::DeleteTexture(m_textureID);
+        } 
     }
 
     void Polygon::SetVertex(std::size_t position, Vertex vertex)
@@ -19,7 +27,7 @@ namespace sgf
         }
         catch(int exception)
         {
-            error::Exception("Polygon::SetVertex", "Argument 'position' is out of bounds.");
+            error::Exception("Polygon::SetVertex", "Argument 'position' is out of bounds.", position);
         }
 
         m_vertices.at(position - 1) = vertex;
@@ -62,7 +70,7 @@ namespace sgf
 
     void Polygon::SetTransparency(bool transparency)
     {
-        m_transparency = transparency;
+        m_isTransparent = transparency;
     }
 
     void Polygon::SetColor(Color color)
@@ -70,22 +78,72 @@ namespace sgf
         m_color = color;
     }
 
-    void Polygon::SetOutline()
+    void Polygon::RemoveColor()
     {
+        m_color = color::noColor;
+    }
 
+    void Polygon::SetOutline(Color color)
+    {
+        m_hasOutline = true;
+        m_outlineColor = color;
+    }
+
+    void Polygon::RemoveOutline()
+    {
+        m_hasOutline = false;
     }
 
     void Polygon::SetTexture(std::string path)
     {
-        if(m_textureID > -1) TextureManager::DeleteTexture(m_textureID);
+        if(m_textureID != noID) TextureManager::DeleteTexture(m_textureID);
         m_texturePath = path;
         m_textureID = TextureManager::NewTexture(path);
     }
 
-    void Polygon::DeleteTexture()
+    void Polygon::RemoveTexture()
     {
         m_texturePath = "";
         TextureManager::DeleteTexture(m_textureID);
+        m_textureID = noID;
+    }
+
+    void Polygon::SetText(std::string text, std::string font, int fontSize, Color color)
+    {
+        if(m_textID != noID) TextureManager::DeleteTexture(m_textID);
+        m_text = text;
+        m_textFont = font;
+        m_textFontSize = fontSize;
+        m_textColor = color;
+
+        m_textID = TextureManager::NewText(text, font, fontSize, color);
+    }
+
+    void Polygon::SetTextFont(std::string font)
+    {
+        m_textFont = font;
+    }
+
+    void Polygon::SetTextColor(Color color)
+    {
+        m_textColor = color;
+    }
+
+    void Polygon::SetTextPosition(Vertex centerVertex)
+    {
+
+    }
+    
+    void Polygon::SetTextFontSize(int fontSize)
+    {
+        m_textFontSize = fontSize;
+    }
+
+    void Polygon::RemoveText()
+    {
+        m_text = "";
+        TextureManager::DeleteTexture(m_textID);
+        m_textID = noID;
     }
 
     int Polygon::GetID() const
@@ -110,117 +168,161 @@ namespace sgf
     //https://www.inf.usi.ch/hormann/papers/Hormann.2001.TPI.pdf
     bool Polygon::Clicked()
     {
-        SDL_Point v = {Mouse::GetPosition().x, Mouse::GetPosition().y};
-
-        if(m_vertices.at(0).y == v.y && m_vertices.at(0).x == v.x)
+        if(!m_isDeleted)
         {
-            return true;
-        }
+            SDL_Point v = {Mouse::GetPosition().x, Mouse::GetPosition().y};
 
-        int winding = 0;
-
-        for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
-        {
-            if(m_vertices.at(i+1).y == v.y)
+            if(m_vertices.at(0).y == v.y && m_vertices.at(0).x == v.x)
             {
-                if(m_vertices.at(i+1).x == v.x)
+                return true;
+            }
+
+            int winding = 0;
+
+            for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
+            {
+                if(m_vertices.at(i+1).y == v.y)
                 {
-                    return true;
-                }
-                else
-                {
-                    if(m_vertices.at(i).y == v.y && ((m_vertices.at(i+1).x > v.x) == (m_vertices.at(i).x < v.x)))
+                    if(m_vertices.at(i+1).x == v.x)
                     {
                         return true;
                     }
+                    else
+                    {
+                        if(m_vertices.at(i).y == v.y && ((m_vertices.at(i+1).x > v.x) == (m_vertices.at(i).x < v.x)))
+                        {
+                            return true;
+                        }
+                    }
+                    
                 }
-                
-            }
-            if((m_vertices.at(i).y < v.y) != (m_vertices.at(i+1).y < v.y))
-            {
-                if(m_vertices.at(i).x >= v.x)
+                if((m_vertices.at(i).y < v.y) != (m_vertices.at(i+1).y < v.y))
                 {
-                    if(m_vertices.at(i+1).x > v.x)
+                    if(m_vertices.at(i).x >= v.x)
                     {
-                        winding += 2*(m_vertices.at(i+1).y > m_vertices.at(i).y) - 1;
+                        if(m_vertices.at(i+1).x > v.x)
+                        {
+                            winding += 2*(m_vertices.at(i+1).y > m_vertices.at(i).y) - 1;
+                        }
+                        else if((Determinant(i, v) > 0) == (m_vertices.at(i+1).y > m_vertices.at(i).y))
+                        {
+                            winding += 2*(m_vertices.at(i+1).y > m_vertices.at(i).y) - 1;
+                        }
                     }
-                    else if((Determinant(i, v) > 0) == (m_vertices.at(i+1).y > m_vertices.at(i).y))
+                    else if(m_vertices.at(i+1).x > v.x)
                     {
-                        winding += 2*(m_vertices.at(i+1).y > m_vertices.at(i).y) - 1;
-                    }
-                }
-                else if(m_vertices.at(i+1).x > v.x)
-                {
-                    if((Determinant(i, v) > 0) == (m_vertices.at(i+1).y > m_vertices.at(i).y))
-                    {
-                        winding += 2*(m_vertices.at(i+1).y > m_vertices.at(i).y) - 1;
+                        if((Determinant(i, v) > 0) == (m_vertices.at(i+1).y > m_vertices.at(i).y))
+                        {
+                            winding += 2*(m_vertices.at(i+1).y > m_vertices.at(i).y) - 1;
+                        }
                     }
                 }
             }
+
+            if(winding % 2 != 0)
+                return true;
+            else 
+                return false;
         }
 
-        if(winding % 2 != 0)
-            return true;
-        else 
-            return false;
+        return false;
     }
 
     void Polygon::Move(int x, int y)
     {
-        for(auto& vertex : m_vertices)
+        if(!m_isDeleted)
         {
-            vertex.x += x;
-            vertex.y += y;
+            for(auto& vertex : m_vertices)
+            {
+                vertex.x += x;
+                vertex.y += y;
+            }
         }
     }
 
     void Polygon::Draw()
     {
-        SDL_Point* vertices = new SDL_Point[m_vertices.size()];
-
-        for(std::size_t i = 0; i < m_vertices.size(); i++)
+        if(!m_isDeleted)
         {
-            vertices[i] = { m_vertices.at(i).x, m_vertices.at(i).y};
-        }   
+            SDL_Point* vertices = new SDL_Point[m_vertices.size()];
 
-        SDL_SetRenderDrawColor(
-            sgf::Engine::renderer,
-            m_color.r,
-            m_color.g,
-            m_color.b,
-            m_color.a
-        );
-
-        if(!m_transparency)
-        {
-            if(!(m_texturePath.length() > 0))
+            for(std::size_t i = 0; i < m_vertices.size(); i++)
             {
-                SDL_RenderDrawLines(Engine::renderer, vertices, m_vertices.size());
-                Fill();
-            }
-            else 
-            {   
-                int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
-                int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
+                vertices[i] = { m_vertices.at(i).x, m_vertices.at(i).y};
+            }   
 
-                for(auto&& vertex : m_vertices)
+            if(!m_isTransparent)
+            {
+                if(m_color != color::noColor)
                 {
-                    if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
-                    if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
-                    if(highestVertexY < vertex.y) highestVertexY = vertex.y;
-                    if(highestVertexX < vertex.x) highestVertexX = vertex.x;
+                    SDL_SetRenderDrawColor(
+                        sgf::Engine::renderer,
+                        m_color.r,
+                        m_color.g,
+                        m_color.b,
+                        m_color.a
+                    );
+                    Fill();
+                }
+                if(m_textureID != noID)
+                {   
+                    int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
+                    int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
+
+                    for(auto&& vertex : m_vertices)
+                    {
+                        if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
+                        if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
+                        if(highestVertexY < vertex.y) highestVertexY = vertex.y;
+                        if(highestVertexX < vertex.x) highestVertexX = vertex.x;
+                    }
+
+                    m_textureRect.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
+                    m_textureRect.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
+                    m_textureRect.h = highestVertexY - lowestVertexY; 
+                    m_textureRect.w = highestVertexX - lowestVertexX;
+
+                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), NULL, &m_textureRect);
                 }
 
-                m_textureRect.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
-                m_textureRect.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
-                m_textureRect.h = highestVertexY - lowestVertexY; 
-                m_textureRect.w = highestVertexX - lowestVertexX;
+                if(m_textID != noID)
+                {   
+                    int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
+                    int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
 
-	            SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), NULL, &m_textureRect);
+                    for(auto&& vertex : m_vertices)
+                    {
+                        if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
+                        if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
+                        if(highestVertexY < vertex.y) highestVertexY = vertex.y;
+                        if(highestVertexX < vertex.x) highestVertexX = vertex.x;
+                    }
+
+                    m_textRect.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
+                    m_textRect.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
+                    m_textRect.h = highestVertexY - lowestVertexY; 
+                    m_textRect.w = highestVertexX - lowestVertexX;
+
+                    SDL_QueryTexture(TextureManager::LoadTexture(m_textID), NULL, NULL, &m_textRect.w, &m_textRect.h);
+                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textID), NULL, &m_textRect);
+                }
+
             }
-        }
 
-        delete[] vertices;
+            if(m_hasOutline == true)
+            {
+                SDL_SetRenderDrawColor(
+                    sgf::Engine::renderer,
+                    m_outlineColor.r,
+                    m_outlineColor.g,
+                    m_outlineColor.b,
+                    m_outlineColor.a
+                );
+                SDL_RenderDrawLines(Engine::renderer, vertices, m_vertices.size());
+            }
+
+            delete[] vertices;
+        }
     }
 
     //Based on "Software Rasterization Algorithms for Filling Triangles" by Bastian Molkenthin
@@ -342,6 +444,7 @@ namespace sgf
     {   
         ObjectManager::DeleteObject(m_ID);
         m_isDeleted = true;
+        m_ID = noID;
     }
 
     bool Polygon::IsDeleted() const 
