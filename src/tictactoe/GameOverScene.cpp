@@ -8,7 +8,8 @@ GameOverScene::GameOverScene([[maybe_unused]] sgf::SceneManagerPtr scene, bool w
     m_winFlag = winFlag;
 
     m_rectangle.SetColor(sgf::Color{200, 200, 200, 0});
-    m_rectangle.SetText("Game over, play another game?", "src/fonts/HelveticaNeueLt.ttf", 30, sgf::Color{255, 0, 0, 150});
+    m_rectangle.SetText("Game over, play another game?", "src/fonts/HelveticaNeueLt.ttf", 30, 
+        sgf::Color{255, 0, 0, 150}, sgf::TextAlignment::Center);
 }
 
 GameOverScene::~GameOverScene()

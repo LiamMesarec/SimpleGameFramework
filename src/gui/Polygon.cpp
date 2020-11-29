@@ -108,7 +108,7 @@ namespace sgf
         m_textureID = noID;
     }
 
-    void Polygon::SetText(std::string text, std::string font, int fontSize, Color color)
+    void Polygon::SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment)
     {
         if(m_textID != noID) TextureManager::DeleteTexture(m_textID);
         m_text = text;
@@ -129,9 +129,22 @@ namespace sgf
         m_textColor = color;
     }
 
-    void Polygon::SetTextPosition(Vertex centerVertex)
+    void Polygon::SetTextAlignment(TextAlignment alignment)
     {
-
+        //int TTF_SizeText(TTF_Font *font, m_text.to_str(), int *w, int *h);
+        switch(alignment)
+        {
+            case TextAlignment::Center:
+                break;
+            case TextAlignment::Left:
+                break;
+            case TextAlignment::Right:
+                break;
+            case TextAlignment::Top:
+                break;
+            case TextAlignment::Bottom:
+                break;
+        }
     }
     
     void Polygon::SetTextFontSize(int fontSize)
@@ -282,7 +295,7 @@ namespace sgf
                     m_textureRect.h = highestVertexY - lowestVertexY; 
                     m_textureRect.w = highestVertexX - lowestVertexX;
 
-                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), NULL, &m_textureRect);
+                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), nullptr, &m_textureRect);
                 }
 
                 if(m_textID != noID)
@@ -303,8 +316,8 @@ namespace sgf
                     m_textRect.h = highestVertexY - lowestVertexY; 
                     m_textRect.w = highestVertexX - lowestVertexX;
 
-                    SDL_QueryTexture(TextureManager::LoadTexture(m_textID), NULL, NULL, &m_textRect.w, &m_textRect.h);
-                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textID), NULL, &m_textRect);
+                    SDL_QueryTexture(TextureManager::LoadTexture(m_textID), nullptr, nullptr, &m_textRect.w, &m_textRect.h);
+                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textID), nullptr, &m_textRect);
                 }
 
             }

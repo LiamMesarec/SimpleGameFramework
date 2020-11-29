@@ -16,7 +16,8 @@ namespace sgf
         template<typename ...Args>
         Polygon(Vertex vertex, Args ...args) noexcept 
             :  m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_textureID{-1}, m_texturePath{""}, m_textID{-1}, m_text{""}, m_textColor{color::noColor}
+                m_textureID{-1}, m_texturePath{""}, m_textID{-1}, m_text{""}, m_textColor{color::noColor},
+                m_textLineHeight{0}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
@@ -27,7 +28,8 @@ namespace sgf
 
         Polygon() noexcept 
             : m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_textureID{-1}, m_texturePath{""}, m_textID{-1}, m_text{""}, m_textColor{color::noColor}
+                m_textureID{-1}, m_texturePath{""}, m_textID{-1}, m_text{""}, m_textColor{color::noColor},
+                m_textLineHeight{0}
         {}
 
         ~Polygon();
@@ -54,20 +56,17 @@ namespace sgf
         void RemoveOutline();
         void SetTexture(std::string path);
         void RemoveTexture();
-        void SetText(std::string text, std::string font, int fontSize, Color color);
+        void SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment);
         void SetTextFont(std::string font);
         void SetTextFontSize(int fontSize);
         void SetTextColor(Color color);
-        void SetTextPosition(Vertex centerVertex);
+        void SetTextAlignment(TextAlignment alignment);
         void RemoveText();
-
         Vertex GetCenterCoords();
         int GetID() const;
         std::vector<Vertex>& GetVertices();
         Color& GetColor();
-
         [[nodiscard]]bool Clicked();
-
         void Move(int x, int y);
         void Draw();
         void Delete();
@@ -77,7 +76,6 @@ namespace sgf
         void FillTopTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
         void FillBottomTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
         void FillTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
-
         int Determinant(int i, SDL_Point v);
 
         int m_ID;
@@ -99,6 +97,7 @@ namespace sgf
         int m_textFontSize;
         Color m_textColor;
         SDL_Rect m_textRect;
+        float m_textLineHeight;
 
         const int noID = -1;
     };

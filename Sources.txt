@@ -1,2 +1,5 @@
 http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
 http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html
+https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index2.php
+https://www.inf.usi.ch/hormann/papers/Hormann.2001.TPI.pdf
+https://wiki.libsdl.org/ 

@@ -2,7 +2,6 @@
 #include "../Engine/Engine.hpp"
 #include "../Engine/Error.hpp"
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 namespace sgf
 {
@@ -83,5 +82,10 @@ namespace sgf
     {
         SDL_DestroyTexture(m_textures.at(ID));
         m_textures.erase(ID);
+    }
+
+    int TextureManager::GetTextSize(int ID)
+    {
+        //return TTF_SizeText(, m_textures.at(ID), int *w, int *h)
     }
 }
