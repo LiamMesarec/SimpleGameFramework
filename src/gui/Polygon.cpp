@@ -92,29 +92,25 @@ namespace sgf
 
     void Polygon::SetTexture(std::string path)
     {
-        if(m_textureID != noID) TextureManager::DeleteTexture(m_textureID);
-        m_texturePath = path;
-        m_textureID = TextureManager::NewTexture(path);
+        m_texture = std::make_unique<Texture>(path);
+        m_texture->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+        m_texture->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
     }
 
     void Polygon::RemoveTexture()
     {
-        m_texturePath = "";
-        TextureManager::DeleteTexture(m_textureID);
-        m_textureID = noID;
+        m_texture->Delete();
     }
 
     void Polygon::SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment)
     {
-        m_hasText = true;
         m_text = std::make_unique<Text>(text, font, fontSize, color, alignment);
         m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
-        m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
+        m_text->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
     }
 
     void Polygon::RemoveText()
     {
-        m_hasText = false;
         m_text->Delete();
     }
 
@@ -254,19 +250,19 @@ namespace sgf
                     Fill();
                 }
 
-                if(m_textureID != noID)
+                if(HasActiveTexture())
                 {   
-                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), nullptr, &m_rectangleForm);
+                    m_texture->Draw();
                 }
 
-                if(m_hasText)
+                if(HasActiveText())
                 {   
                     m_text->Draw();
                 }
 
             }
 
-            if(m_hasOutline == true)
+            if(m_hasOutline)
             {
                 SDL_SetRenderDrawColor(
                     sgf::Engine::renderer,
@@ -405,12 +401,12 @@ namespace sgf
             ObjectManager::DeleteObject(m_ID);
         }
         
-        if(m_textureID != noID)
+        if(HasActiveTexture())
         {
-            TextureManager::DeleteTexture(m_textureID);
+            m_texture->Delete();
         } 
 
-        if(m_hasText)
+        if(HasActiveText())
         {
             m_text->Delete();
         }
@@ -443,10 +439,16 @@ namespace sgf
         m_rectangleForm.h = highestVertexY - lowestVertexY; 
         m_rectangleForm.w = highestVertexX - lowestVertexX;
 
-        if(m_hasText)
+        if(HasActiveText())
         {
             m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
-            m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
+            m_text->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
+        }
+
+        if(HasActiveTexture())
+        {   
+            m_texture->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+            m_texture->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
         }
 
         delete[] vertices;
@@ -462,5 +464,33 @@ namespace sgf
         }   
 
         return vertices;        
+    }
+
+    bool Polygon::HasActiveText()
+    {
+        if(m_text == nullptr)
+        {
+            return false;
+        } 
+        else if(m_text->IsDeleted())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Polygon::HasActiveTexture()
+    {
+        if(m_texture == nullptr)
+        {
+            return false;
+        } 
+        else if(m_texture->IsDeleted())
+        {
+            return false;
+        }
+
+        return true;
     }
 }

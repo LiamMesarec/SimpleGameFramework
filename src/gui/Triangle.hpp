@@ -3,7 +3,7 @@
 #include "Color.hpp"
 #include "../math/Vector.hpp"
 #include <vector>
-#include "TextureManager.hpp"
+#include "Texture.hpp"
 
 namespace sgf
 {

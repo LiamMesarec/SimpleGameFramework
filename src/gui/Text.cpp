@@ -1,4 +1,4 @@
-#include "TextureManager.hpp"
+#include "Texture.hpp"
 #include "../Engine/Engine.hpp"
 #include "Text.hpp"
 #include "../Engine/Error.hpp"
@@ -76,10 +76,10 @@ namespace sgf
         m_rect.h = height;
     }
 
-    void Text::SetContainerPosition(Vertex vertex)
+    void Text::SetContainerPosition(int x, int y)
     {
-        m_rect.x = vertex.x;
-        m_rect.y = vertex.y;
+        m_rect.x = x;
+        m_rect.y = y;
     }
 
     void Text::Draw()

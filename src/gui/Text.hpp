@@ -30,7 +30,7 @@ namespace sgf
         void SetColor(const Color& color);
         void SetAlignment(TextAlignment alignment);
         void SetContainerSize(int width, int height);
-        void SetContainerPosition(Vertex vertex);
+        void SetContainerPosition(int x, int y);
 
         int GetTextSize();
         std::string& GetText();

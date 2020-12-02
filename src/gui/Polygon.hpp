@@ -2,7 +2,7 @@
 #include <vector>
 #include "../math/Vector.hpp"
 #include "Color.hpp"
-#include "TextureManager.hpp"
+#include "Texture.hpp"
 #include <iostream>
 #include "../Engine/Error.hpp"
 #include "../Engine/Engine.hpp"
@@ -17,7 +17,7 @@ namespace sgf
         template<typename ...Args>
         Polygon(Vertex vertex, Args ...args) noexcept 
             :  m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_textureID{-1}, m_texturePath{""}, m_text{nullptr}, m_hasText{false}
+                m_texture{nullptr}, m_text{nullptr}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
@@ -25,16 +25,21 @@ namespace sgf
 
             m_ID = ObjectManager::NewObject(m_vertices);
             SetRectangleForm();
-            if(m_hasText)
+            if(HasActiveText())
             {   
                 m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
-                m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
+                m_text->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
+            }
+            if(HasActiveTexture())
+            {   
+                m_texture->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+                m_texture->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
             }
         }
 
         Polygon() noexcept 
             : m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_textureID{-1}, m_texturePath{""}, m_text{nullptr}, m_hasText{false}
+                m_texture{nullptr},  m_text{nullptr}
         {}
 
         ~Polygon();
@@ -52,10 +57,15 @@ namespace sgf
                 m_ID = ObjectManager::NewObject(m_vertices);
             }
             SetRectangleForm();
-            if(m_hasText)
+            if(HasActiveText())
             {   
                 m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
-                m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
+                m_text->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
+            }
+            if(HasActiveTexture())
+            {   
+                m_texture->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+                m_texture->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
             }
         }
         void SetVertex(std::size_t position, Vertex vertex);
@@ -93,6 +103,9 @@ namespace sgf
         void SetRectangleForm();
         SDL_Point* GetVerticesArray();
 
+        bool HasActiveText();
+        bool HasActiveTexture();
+
         int m_ID;
         std::vector<Vertex> m_vertices;
         Color m_color;
@@ -102,12 +115,10 @@ namespace sgf
         bool m_isTransparent;
         bool m_isDeleted;
 
-        int m_textureID;
-        std::string m_texturePath;
         SDL_Rect m_rectangleForm;
 
+        std::unique_ptr<Texture> m_texture;
         std::unique_ptr<Text> m_text;
-        bool m_hasText;
 
         const int noID = -1;
     };
