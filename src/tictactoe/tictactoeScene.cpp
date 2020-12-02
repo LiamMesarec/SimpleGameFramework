@@ -34,7 +34,7 @@ void TicTacToe::HandleInput()
     {
         if(sgf::EventManager::Event == sgf::EventType::MousePressed)
         {
-            for(int i = 0; i < board.GetSquareCount(); i++)
+            for(std::size_t i = 0; i < board.GetSquareCount(); i++)
             {
                 if(board.Square(i)->Clicked() && squares[i] == Square::none)
                 {

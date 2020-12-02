@@ -8,19 +8,22 @@ namespace sgf
         m_squareWidth = squareWidth;
         m_height = height;
         m_width = width;
-        m_squareCount = height*width;
         m_position = position;
-
-        m_polygons = new Polygon[m_squareCount];
         
         CreateBoard();
+    }
+
+    Grid::~Grid()
+    {
+        Delete();
+        //delete[] m_polygons;
     }
 
     Polygon* Grid::Square(int ID)
     {
         try
         {
-            if(ID < 0 || static_cast<std::size_t>(ID) > (m_squareCount - 1))
+            if(ID < 0 || static_cast<std::size_t>(ID) > (GetSquareCount() - 1))
             {
                 throw(ID);
             }
@@ -63,9 +66,9 @@ namespace sgf
         return m_width;
     }
 
-    int Grid::GetSquareCount() const
+    std::size_t Grid::GetSquareCount() const
     {
-        return m_squareCount;
+        return m_width*m_height;
     }
 
     int Grid::GetSquareHeight() const
@@ -80,11 +83,11 @@ namespace sgf
 
     void Grid::CreateBoard()
     {
-        m_polygons = new Polygon[m_squareCount];
+        m_polygons = new Polygon[GetSquareCount()];
 
         int posX = 0;
         int posY = 0;
-        for(std::size_t i = 0; i < m_squareCount; i++)
+        for(std::size_t i = 0; i < GetSquareCount(); i++)
         {
             m_polygons[i].SetVertices(
                 Vertex{m_position.x + posX, m_position.y + posY},
@@ -104,7 +107,7 @@ namespace sgf
 
     void Grid::Draw()
     {
-        for(std::size_t i = 0; i < m_squareCount; i++)
+        for(std::size_t i = 0; i < GetSquareCount(); i++)
         {
             m_polygons[i].Draw();
         }
@@ -112,7 +115,7 @@ namespace sgf
 
     void Grid::Delete()
     {
-        for(std::size_t i = 0; i < m_squareCount; i++)
+        for(std::size_t i = 0; i < GetSquareCount(); i++)
         {
             m_polygons[i].Delete();
         }

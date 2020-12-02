@@ -1,19 +1,12 @@
 #include "Polygon.hpp"
 #include "../input/Mouse.hpp"
+#include <memory>
 
 namespace sgf
 {
     Polygon::~Polygon()
     {
-        if(!m_isDeleted)
-        {
-            ObjectManager::DeleteObject(m_ID);
-        }
-        
-        if(m_textureID != -1)
-        {
-            TextureManager::DeleteTexture(m_textureID);
-        } 
+        Delete();
     }
 
     void Polygon::SetVertex(std::size_t position, Vertex vertex)
@@ -29,8 +22,9 @@ namespace sgf
         {
             error::Exception("Polygon::SetVertex", "Argument 'position' is out of bounds.", position);
         }
-
+        
         m_vertices.at(position - 1) = vertex;
+        SetRectangleForm();
     }
 
     void Polygon::SetPosition(int x, int y)
@@ -43,6 +37,8 @@ namespace sgf
             vertex.x += newCenterPoint.x - centerPoint.x;
             vertex.y += newCenterPoint.y - centerPoint.y;
         }
+
+        SetRectangleForm();
     }
 
     std::vector<Vertex>& Polygon::GetVertices()
@@ -110,53 +106,36 @@ namespace sgf
 
     void Polygon::SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment)
     {
-        if(m_textID != noID) TextureManager::DeleteTexture(m_textID);
-        m_text = text;
-        m_textFont = font;
-        m_textFontSize = fontSize;
-        m_textColor = color;
-
-        m_textID = TextureManager::NewText(text, font, fontSize, color);
-    }
-
-    void Polygon::SetTextFont(std::string font)
-    {
-        m_textFont = font;
-    }
-
-    void Polygon::SetTextColor(Color color)
-    {
-        m_textColor = color;
-    }
-
-    void Polygon::SetTextAlignment(TextAlignment alignment)
-    {
-        //int TTF_SizeText(TTF_Font *font, m_text.to_str(), int *w, int *h);
-        switch(alignment)
-        {
-            case TextAlignment::Center:
-                break;
-            case TextAlignment::Left:
-                break;
-            case TextAlignment::Right:
-                break;
-            case TextAlignment::Top:
-                break;
-            case TextAlignment::Bottom:
-                break;
-        }
-    }
-    
-    void Polygon::SetTextFontSize(int fontSize)
-    {
-        m_textFontSize = fontSize;
+        m_hasText = true;
+        m_text = std::make_unique<Text>(text, font, fontSize, color, alignment);
+        m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+        m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
     }
 
     void Polygon::RemoveText()
     {
-        m_text = "";
-        TextureManager::DeleteTexture(m_textID);
-        m_textID = noID;
+        m_hasText = false;
+        m_text->Delete();
+    }
+
+    void Polygon::SetTextFont(std::string font)
+    {
+        m_text->SetFont(font);
+    }
+
+    void Polygon::SetTextColor(Color color)
+    {
+        m_text->SetColor(color);
+    }
+
+    void Polygon::SetTextAlignment(TextAlignment alignment)
+    {
+        m_text->SetAlignment(alignment);
+    }
+    
+    void Polygon::SetTextFontSize(int fontSize)
+    {
+        m_text->SetFontSize(fontSize);
     }
 
     int Polygon::GetID() const
@@ -251,18 +230,15 @@ namespace sgf
                 vertex.y += y;
             }
         }
+        
+        SetRectangleForm();
     }
 
     void Polygon::Draw()
     {
         if(!m_isDeleted)
         {
-            SDL_Point* vertices = new SDL_Point[m_vertices.size()];
-
-            for(std::size_t i = 0; i < m_vertices.size(); i++)
-            {
-                vertices[i] = { m_vertices.at(i).x, m_vertices.at(i).y};
-            }   
+            SDL_Point* vertices = GetVerticesArray();
 
             if(!m_isTransparent)
             {
@@ -277,47 +253,15 @@ namespace sgf
                     );
                     Fill();
                 }
+
                 if(m_textureID != noID)
                 {   
-                    int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
-                    int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
-
-                    for(auto&& vertex : m_vertices)
-                    {
-                        if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
-                        if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
-                        if(highestVertexY < vertex.y) highestVertexY = vertex.y;
-                        if(highestVertexX < vertex.x) highestVertexX = vertex.x;
-                    }
-
-                    m_textureRect.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
-                    m_textureRect.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
-                    m_textureRect.h = highestVertexY - lowestVertexY; 
-                    m_textureRect.w = highestVertexX - lowestVertexX;
-
-                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), nullptr, &m_textureRect);
+                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textureID), nullptr, &m_rectangleForm);
                 }
 
-                if(m_textID != noID)
+                if(m_hasText)
                 {   
-                    int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
-                    int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
-
-                    for(auto&& vertex : m_vertices)
-                    {
-                        if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
-                        if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
-                        if(highestVertexY < vertex.y) highestVertexY = vertex.y;
-                        if(highestVertexX < vertex.x) highestVertexX = vertex.x;
-                    }
-
-                    m_textRect.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
-                    m_textRect.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
-                    m_textRect.h = highestVertexY - lowestVertexY; 
-                    m_textRect.w = highestVertexX - lowestVertexX;
-
-                    SDL_QueryTexture(TextureManager::LoadTexture(m_textID), nullptr, nullptr, &m_textRect.w, &m_textRect.h);
-                    SDL_RenderCopy(Engine::renderer, TextureManager::LoadTexture(m_textID), nullptr, &m_textRect);
+                    m_text->Draw();
                 }
 
             }
@@ -455,13 +399,68 @@ namespace sgf
 
     void Polygon::Delete()
     {   
-        ObjectManager::DeleteObject(m_ID);
-        m_isDeleted = true;
-        m_ID = noID;
+
+        if(!m_isDeleted)
+        {
+            ObjectManager::DeleteObject(m_ID);
+        }
+        
+        if(m_textureID != noID)
+        {
+            TextureManager::DeleteTexture(m_textureID);
+        } 
+
+        if(m_hasText)
+        {
+            m_text->Delete();
+        }
+
+        m_vertices.clear(); 
     }
 
     bool Polygon::IsDeleted() const 
     {
         return m_isDeleted;
+    }
+
+    void Polygon::SetRectangleForm()
+    {
+        SDL_Point* vertices = GetVerticesArray();
+
+        int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
+        int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
+
+        for(auto&& vertex : m_vertices)
+        {
+            if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
+            if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
+            if(highestVertexY < vertex.y) highestVertexY = vertex.y;
+            if(highestVertexX < vertex.x) highestVertexX = vertex.x;
+        }
+
+        m_rectangleForm.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
+        m_rectangleForm.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
+        m_rectangleForm.h = highestVertexY - lowestVertexY; 
+        m_rectangleForm.w = highestVertexX - lowestVertexX;
+
+        if(m_hasText)
+        {
+            m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+            m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
+        }
+
+        delete[] vertices;
+    }
+
+    SDL_Point* Polygon::GetVerticesArray()
+    {
+        SDL_Point* vertices = new SDL_Point[m_vertices.size()];
+
+        for(std::size_t i = 0; i < m_vertices.size(); i++)
+        {
+            vertices[i] = { m_vertices.at(i).x, m_vertices.at(i).y};
+        }   
+
+        return vertices;        
     }
 }

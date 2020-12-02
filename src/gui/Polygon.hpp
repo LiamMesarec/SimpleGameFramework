@@ -7,6 +7,7 @@
 #include "../Engine/Error.hpp"
 #include "../Engine/Engine.hpp"
 #include "../Engine/ObjectManager.hpp"
+#include "Text.hpp"
 
 namespace sgf
 {
@@ -16,20 +17,24 @@ namespace sgf
         template<typename ...Args>
         Polygon(Vertex vertex, Args ...args) noexcept 
             :  m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_textureID{-1}, m_texturePath{""}, m_textID{-1}, m_text{""}, m_textColor{color::noColor},
-                m_textLineHeight{0}
+                m_textureID{-1}, m_texturePath{""}, m_text{nullptr}, m_hasText{false}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
             m_vertices.push_back(vertex);
 
             m_ID = ObjectManager::NewObject(m_vertices);
+            SetRectangleForm();
+            if(m_hasText)
+            {   
+                m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+                m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
+            }
         }
 
         Polygon() noexcept 
             : m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_textureID{-1}, m_texturePath{""}, m_textID{-1}, m_text{""}, m_textColor{color::noColor},
-                m_textLineHeight{0}
+                m_textureID{-1}, m_texturePath{""}, m_text{nullptr}, m_hasText{false}
         {}
 
         ~Polygon();
@@ -46,6 +51,12 @@ namespace sgf
             {
                 m_ID = ObjectManager::NewObject(m_vertices);
             }
+            SetRectangleForm();
+            if(m_hasText)
+            {   
+                m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
+                m_text->SetContainerPosition({m_rectangleForm.x, m_rectangleForm.y});
+            }
         }
         void SetVertex(std::size_t position, Vertex vertex);
         void SetPosition(int x, int y);
@@ -57,15 +68,17 @@ namespace sgf
         void SetTexture(std::string path);
         void RemoveTexture();
         void SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment);
+        void RemoveText();
         void SetTextFont(std::string font);
         void SetTextFontSize(int fontSize);
         void SetTextColor(Color color);
         void SetTextAlignment(TextAlignment alignment);
-        void RemoveText();
+
         Vertex GetCenterCoords();
         int GetID() const;
         std::vector<Vertex>& GetVertices();
         Color& GetColor();
+
         [[nodiscard]]bool Clicked();
         void Move(int x, int y);
         void Draw();
@@ -77,6 +90,8 @@ namespace sgf
         void FillBottomTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
         void FillTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
         int Determinant(int i, SDL_Point v);
+        void SetRectangleForm();
+        SDL_Point* GetVerticesArray();
 
         int m_ID;
         std::vector<Vertex> m_vertices;
@@ -89,15 +104,10 @@ namespace sgf
 
         int m_textureID;
         std::string m_texturePath;
-        SDL_Rect m_textureRect;
+        SDL_Rect m_rectangleForm;
 
-        int m_textID;
-        std::string m_text;
-        std::string m_textFont;
-        int m_textFontSize;
-        Color m_textColor;
-        SDL_Rect m_textRect;
-        float m_textLineHeight;
+        std::unique_ptr<Text> m_text;
+        bool m_hasText;
 
         const int noID = -1;
     };
