@@ -100,6 +100,7 @@ namespace sgf
     void Polygon::RemoveTexture()
     {
         m_texture->Delete();
+        m_texture = nullptr;
     }
 
     void Polygon::SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment)
@@ -112,6 +113,7 @@ namespace sgf
     void Polygon::RemoveText()
     {
         m_text->Delete();
+        m_text = nullptr;
     }
 
     void Polygon::SetTextFont(std::string font)
@@ -468,10 +470,10 @@ namespace sgf
 
     bool Polygon::HasActiveText()
     {
-        if(m_text == nullptr)
+        if(!m_text)
         {
             return false;
-        } 
+        }
         else if(m_text->IsDeleted())
         {
             return false;
@@ -482,7 +484,7 @@ namespace sgf
 
     bool Polygon::HasActiveTexture()
     {
-        if(m_texture == nullptr)
+        if(!m_texture)
         {
             return false;
         } 

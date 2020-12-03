@@ -5,7 +5,7 @@
 
 namespace sgf
 {
-    Text::Text(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment)
+    Text::Text(std::string text, const std::string& font, int fontSize, Color color, TextAlignment alignment)
         : m_text{""}, m_font{""}, m_fontSize{0}, m_color{color::noColor}, m_alignment{TextAlignment::Center},
         m_fontPtr{nullptr}, m_texturePtr{nullptr}, m_active{false}
     {
@@ -126,8 +126,18 @@ namespace sgf
 
     void Text::Delete()
     {
-        SDL_DestroyTexture(m_texturePtr);
-        TTF_CloseFont(m_fontPtr); 
+        if(m_fontPtr)
+        {
+            TTF_CloseFont(m_fontPtr); 
+        }
+        
+        if(m_texturePtr)
+        {
+            SDL_DestroyTexture(m_texturePtr);
+        }
+
+        m_texturePtr = nullptr;
+        m_fontPtr = nullptr;
         m_active = false;       
     }
 

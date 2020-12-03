@@ -16,8 +16,8 @@ namespace sgf
     public:
         template<typename ...Args>
         Polygon(Vertex vertex, Args ...args) noexcept 
-            :  m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_texture{nullptr}, m_text{nullptr}
+            :  m_ID{-1}, m_color{color::noColor}, m_outlineColor{color::noColor}, m_hasOutline{false}, 
+                m_isTransparent{false}, m_isDeleted{false}, m_texture{nullptr}, m_text{nullptr}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
@@ -38,8 +38,8 @@ namespace sgf
         }
 
         Polygon() noexcept 
-            : m_ID{-1}, m_color{color::noColor}, m_hasOutline{false}, m_isDeleted{false}, 
-                m_texture{nullptr},  m_text{nullptr}
+            : m_ID{-1}, m_color{color::noColor}, m_outlineColor{color::noColor}, m_hasOutline{false}, 
+                m_isTransparent{false}, m_isDeleted{false}, m_texture{nullptr},  m_text{nullptr}
         {}
 
         ~Polygon();
