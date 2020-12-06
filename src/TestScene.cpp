@@ -29,9 +29,8 @@ void TestScene::Render()
 
 void TestScene::Update()
 {
-    desno.Move(1, 0);
-    desno.Rotate(sgf::Direction::Left, 1);
-    //trikotnik.Rotate(sgf::Direction::Left, 1);
+    desno.Move(3, 0);
+    desno.Rotate(10);
     if(sgf::ObjectCollision::Collided(polygon, desno))
     {
         std::cout << "fax";
@@ -84,10 +83,6 @@ void TestScene::HandleInput()
             
             if(desno.Clicked())
                 desno.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
-            if(trikotnik.Clicked())
-            {
-                trikotnik.Rotate(sgf::Direction::Left, 1);
-            }
         }
     }
 }

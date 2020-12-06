@@ -96,8 +96,8 @@ namespace sgf
         Color& GetColor();
 
         [[nodiscard]]bool Clicked();
-        void Move(int x, int y);
-        void Rotate(Direction direction, int degrees);
+        void Move(float x, float y);
+        void Rotate(float degrees, bool antiClockwise = false);
         void Draw();
         void Delete();
         bool IsDeleted() const;

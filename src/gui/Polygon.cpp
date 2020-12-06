@@ -221,7 +221,7 @@ namespace sgf
         return false;
     }
 
-    void Polygon::Move(int x, int y)
+    void Polygon::Move(float x, float y)
     {
         if(!m_isDeleted)
         {
@@ -235,7 +235,7 @@ namespace sgf
         SetRectangleForm();
     }
 
-    void Polygon::Rotate(Direction direction, int degrees)
+    void Polygon::Rotate(float degrees, bool antiClockwise)
     {
         if(!m_isDeleted)
         {
@@ -245,14 +245,29 @@ namespace sgf
             float sinValue = sin(Trig::DegreesToRadians(degrees));
             float cosValue = cos(Trig::DegreesToRadians(degrees));
 
-            for(auto& vertex : m_vertices)
+            if(!antiClockwise)
             {
-                vX = vertex.x - centerX;
-                vY = vertex.y - centerY;
+                for(auto& vertex : m_vertices)
+                {
+                    vX = vertex.x - centerX;
+                    vY = vertex.y - centerY;
 
-                vertex.x = centerX + vX * cosValue - vY * sinValue;
-                vertex.y = centerY + vX * sinValue + vY * cosValue;
+                    vertex.x = centerX + vX * cosValue - vY * sinValue;
+                    vertex.y = centerY + vX * sinValue + vY * cosValue;
+                }
             }
+            else
+            {
+                for(auto& vertex : m_vertices)
+                {
+                    vX = vertex.x - centerX;
+                    vY = vertex.y - centerY;
+
+                    vertex.x = centerX + vX * cosValue + vY * sinValue;
+                    vertex.y = centerY - vX * sinValue + vY * cosValue;
+                }                
+            }
+            
         }
     }
 
