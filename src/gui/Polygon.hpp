@@ -75,6 +75,7 @@ namespace sgf
             }
         }
         void SetVertex(std::size_t position, Vertex vertex);
+        void AddVertex(Vertex vertex);
         void SetPosition(float x, float y);
         void SetTransparency(bool transparency);
         void SetColor(Color color);

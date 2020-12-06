@@ -30,6 +30,13 @@ namespace sgf
         SetRectangleForm();
     }
 
+    void Polygon::AddVertex(Vertex vertex)
+    {
+        m_vertices.pop_back();
+        m_vertices.push_back(vertex);
+        m_vertices.push_back(m_vertices.at(0));
+    }
+
     void Polygon::SetPosition(float x, float y)
     {
         Vertex centerPoint = GetCenterCoords();
