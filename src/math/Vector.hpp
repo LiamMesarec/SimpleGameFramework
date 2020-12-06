@@ -10,7 +10,7 @@ namespace sgf
 
     struct Vertex
     {
-        int x, y;
+        float x, y;
         LineType type = LineType::STRAIGHT;  
     };
 

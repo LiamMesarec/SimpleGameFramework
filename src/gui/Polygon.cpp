@@ -1,6 +1,9 @@
 #include "Polygon.hpp"
 #include "../input/Mouse.hpp"
 #include <memory>
+#include <cmath>
+#include "../math/Constants.hpp"
+#include "../math/Functions.hpp"
 
 namespace sgf
 {
@@ -27,7 +30,7 @@ namespace sgf
         SetRectangleForm();
     }
 
-    void Polygon::SetPosition(int x, int y)
+    void Polygon::SetPosition(float x, float y)
     {
         Vertex centerPoint = GetCenterCoords();
         Vertex newCenterPoint = {x, y};
@@ -48,7 +51,7 @@ namespace sgf
 
     Vertex Polygon::GetCenterCoords()
     {
-        int minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
+        float minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
         Vertex* vertices = new Vertex[m_vertices.size()];
 
         for (std::size_t i = 0; i < m_vertices.size(); i++) 
@@ -160,7 +163,7 @@ namespace sgf
     {
         if(!m_isDeleted)
         {
-            SDL_Point v = {Mouse::GetPosition().x, Mouse::GetPosition().y};
+            SDL_Point v = {static_cast<int>(Mouse::GetPosition().x), static_cast<int>(Mouse::GetPosition().y)};
 
             if(m_vertices.at(0).y == v.y && m_vertices.at(0).x == v.x)
             {
@@ -230,6 +233,27 @@ namespace sgf
         }
         
         SetRectangleForm();
+    }
+
+    void Polygon::Rotate(Direction direction, int degrees)
+    {
+        if(!m_isDeleted)
+        {
+            float vX, vY;
+            float centerX = GetCenterCoords().x;
+            float centerY = GetCenterCoords().y;
+            float sinValue = sin(Trig::DegreesToRadians(degrees));
+            float cosValue = cos(Trig::DegreesToRadians(degrees));
+
+            for(auto& vertex : m_vertices)
+            {
+                vX = vertex.x - centerX;
+                vY = vertex.y - centerY;
+
+                vertex.x = centerX + vX * cosValue - vY * sinValue;
+                vertex.y = centerY + vX * sinValue + vY * cosValue;
+            }
+        }
     }
 
     void Polygon::Draw()
@@ -345,13 +369,13 @@ namespace sgf
     void Polygon::Fill()
     {
         SDL_Point** triangles = new SDL_Point*[m_vertices.size() + 1];
-        SDL_Point centerCoords = {GetCenterCoords().x, GetCenterCoords().y};
+        SDL_Point centerCoords = {static_cast<int>(GetCenterCoords().x), static_cast<int>(GetCenterCoords().y)};
 
         for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
         {
             triangles[i] = new SDL_Point[2];
-            triangles[i][0] = {m_vertices.at(i).x, m_vertices.at(i).y};
-            triangles[i][1] = {m_vertices.at(i + 1).x, m_vertices.at(i + 1).y};
+            triangles[i][0] = {static_cast<int>(m_vertices.at(i).x), static_cast<int>(m_vertices.at(i).y)};
+            triangles[i][1] = {static_cast<int>(m_vertices.at(i + 1).x), static_cast<int>(m_vertices.at(i + 1).y)};
         }
 
         for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
@@ -462,7 +486,7 @@ namespace sgf
 
         for(std::size_t i = 0; i < m_vertices.size(); i++)
         {
-            vertices[i] = { m_vertices.at(i).x, m_vertices.at(i).y};
+            vertices[i] = { static_cast<int>(m_vertices.at(i).x), static_cast<int>(m_vertices.at(i).y)};
         }   
 
         return vertices;        

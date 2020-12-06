@@ -3,3 +3,4 @@ http://totologic.blogspot.com/2014/01/accurate-point-in-triangle-test.html
 https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index2.php
 https://www.inf.usi.ch/hormann/papers/Hormann.2001.TPI.pdf
 https://wiki.libsdl.org/ 
+https://www.gatevidyalay.com/2d-rotation-in-computer-graphics-definition-examples/

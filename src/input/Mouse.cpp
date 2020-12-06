@@ -5,10 +5,10 @@ namespace sgf
 {
     Vertex Mouse::GetPosition()
     {
-        Vertex pos = {0, 0};
+        int x, y;
 
-        SDL_GetMouseState(&pos.x, &pos.y);
+        SDL_GetMouseState(&x, &y);
 
-        return pos;
+        return {static_cast<float>(x), static_cast<float>(y)};
     }
 }

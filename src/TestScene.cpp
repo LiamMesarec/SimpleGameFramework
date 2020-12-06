@@ -6,9 +6,11 @@ TestScene::TestScene([[maybe_unused]] sgf::SceneManagerPtr scene)
 {   
 
     //sgf::Camera::SetSize(1920, 1080);
+    sgf::Window::SetBackgroundColor(sgf::Color{146, 224, 236, 0});
     polygon.SetTexture("src/textures/forest.png");
     polygon2.SetColor({200, 200, 100, 100});
     trikotnik.SetColor(sgf::color::red);
+    desno.SetColor(sgf::color::green);
 }
 
 TestScene::~TestScene()
@@ -28,6 +30,8 @@ void TestScene::Render()
 void TestScene::Update()
 {
     desno.Move(1, 0);
+    desno.Rotate(sgf::Direction::Left, 1);
+    //trikotnik.Rotate(sgf::Direction::Left, 1);
     if(sgf::ObjectCollision::Collided(polygon, desno))
     {
         std::cout << "fax";
@@ -80,6 +84,10 @@ void TestScene::HandleInput()
             
             if(desno.Clicked())
                 desno.SetColor({sgf::Random(0, 255), sgf::Random(0, 255), sgf::Random(0, 255), 40});
+            if(trikotnik.Clicked())
+            {
+                trikotnik.Rotate(sgf::Direction::Left, 1);
+            }
         }
     }
 }

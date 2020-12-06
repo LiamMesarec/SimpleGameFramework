@@ -11,6 +11,12 @@
 
 namespace sgf
 {
+
+    enum class Direction
+    {
+        Left, Right
+    };
+
     class Polygon
     {
     public:
@@ -69,7 +75,7 @@ namespace sgf
             }
         }
         void SetVertex(std::size_t position, Vertex vertex);
-        void SetPosition(int x, int y);
+        void SetPosition(float x, float y);
         void SetTransparency(bool transparency);
         void SetColor(Color color);
         void RemoveColor();
@@ -91,6 +97,7 @@ namespace sgf
 
         [[nodiscard]]bool Clicked();
         void Move(int x, int y);
+        void Rotate(Direction direction, int degrees);
         void Draw();
         void Delete();
         bool IsDeleted() const;

@@ -47,6 +47,8 @@ namespace sgf
                 Window::GetBackgroundColor().a
             );
 
+            SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+
             SDL_RenderClear(renderer);
 
             GetCurrentScene()->HandleInput();
@@ -54,6 +56,8 @@ namespace sgf
             GetCurrentScene()->Update();
 
             GetCurrentScene()->Render();
+
+            SDL_RenderSetScale(renderer, 1, 1);
 
             SDL_RenderPresent(renderer);
 
