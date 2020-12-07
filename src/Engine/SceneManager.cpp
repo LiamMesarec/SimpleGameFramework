@@ -31,9 +31,7 @@ namespace sgf
 
     void SceneManager::Loop(SDL_Renderer* renderer) 
     {
-        bool gameLoop = true;
-
-        while(gameLoop) 
+        while(true) 
         {
             if (GetCurrentScene() == nullptr)
             {
