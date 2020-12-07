@@ -1,5 +1,5 @@
 #include <random>
-#include "Random.hpp"
+#include "../../include/math/Random.hpp"
 
 namespace sgf
 {

@@ -1,7 +1,7 @@
-#include "Texture.hpp"
-#include "../Engine/Engine.hpp"
-#include "Text.hpp"
-#include "../Engine/Error.hpp"
+#include "../../include/gui/Text.hpp"
+#include "../../include/engine/Engine.hpp"
+#include "../../include/gui/Texture.hpp"
+#include "../../include/engine/Error.hpp"
 
 namespace sgf
 {

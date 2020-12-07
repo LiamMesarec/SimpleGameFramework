@@ -1,5 +1,5 @@
-#include "SceneManager.hpp"
-#include "Window.hpp"
+#include "../../include/engine/SceneManager.hpp"
+#include "../../include/engine/Window.hpp"
 
 namespace sgf
 {

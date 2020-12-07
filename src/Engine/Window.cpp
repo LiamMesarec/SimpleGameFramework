@@ -1,8 +1,8 @@
-#include "Window.hpp"
+#include "../../include/engine/Window.hpp"
 #include "SDL2/SDL.h"
-#include "Engine.hpp"
-#include "Error.hpp"
-#include "Camera.hpp"
+#include "../../include/engine/Engine.hpp"
+#include "../../include/engine/Error.hpp"
+#include "../../include/engine/Camera.hpp"
 #include <SDL2/SDL_ttf.h>
 
 namespace sgf 

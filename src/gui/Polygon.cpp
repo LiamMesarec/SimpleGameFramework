@@ -1,9 +1,9 @@
-#include "Polygon.hpp"
-#include "../input/Mouse.hpp"
+#include "../../include/gui/Polygon.hpp"
+#include "../../include/input/Mouse.hpp"
 #include <memory>
 #include <cmath>
-#include "../math/Constants.hpp"
-#include "../math/Functions.hpp"
+#include "../../include/math/Constants.hpp"
+#include "../../include/math/Functions.hpp"
 
 namespace sgf
 {

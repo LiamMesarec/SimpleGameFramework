@@ -1,6 +1,6 @@
-#include "Texture.hpp"
-#include "../Engine/Engine.hpp"
-#include "../Engine/Error.hpp"
+#include "../../include/gui/Texture.hpp"
+#include "../../include/engine/Engine.hpp"
+#include "../../include/engine/Error.hpp"
 #include <SDL2/SDL_image.h>
 #include <algorithm>
 

@@ -1,4 +1,4 @@
-#include "Circle.hpp"
+#include "../../include/gui/Circle.hpp"
 
 namespace sgf
 {

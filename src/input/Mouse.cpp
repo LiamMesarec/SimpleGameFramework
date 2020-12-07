@@ -1,4 +1,4 @@
-#include "Mouse.hpp"
+#include "../../include/input/Mouse.hpp"
 #include <iostream>
 
 namespace sgf

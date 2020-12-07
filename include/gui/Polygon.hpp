@@ -4,9 +4,9 @@
 #include "Color.hpp"
 #include "Texture.hpp"
 #include <iostream>
-#include "../Engine/Error.hpp"
-#include "../Engine/Engine.hpp"
-#include "../Engine/ObjectManager.hpp"
+#include "../engine/Error.hpp"
+#include "../engine/Engine.hpp"
+#include "../engine/ObjectManager.hpp"
 #include "Text.hpp"
 
 namespace sgf

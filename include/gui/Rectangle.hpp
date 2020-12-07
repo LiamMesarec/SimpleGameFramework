@@ -3,7 +3,7 @@
 #include "Color.hpp"
 #include "Triangle.hpp"
 #include "../math/Vector.hpp"
-#include "../Engine/ObjectManager.hpp"
+#include "../engine/ObjectManager.hpp"
 
 namespace sgf
 {

@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+#include "../../include/Engine/Camera.hpp"
 
 namespace sgf
 {

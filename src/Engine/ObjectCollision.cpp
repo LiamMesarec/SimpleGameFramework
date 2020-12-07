@@ -1,8 +1,8 @@
-#include "ObjectCollision.hpp"
-#include "ObjectManager.hpp"
-#include "../math/Random.hpp"
+#include "../../include/engine/ObjectCollision.hpp"
+#include "../../include/engine/ObjectManager.hpp"
+#include "../../include/math/Random.hpp"
 #include <vector>
-#include "../math/Functions.hpp"
+#include "../../include/math/Functions.hpp"
 #include <cmath>
 #include <iostream>
 

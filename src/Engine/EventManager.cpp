@@ -1,4 +1,4 @@
-#include "EventManager.hpp"
+#include "../../include/engine/EventManager.hpp"
 
 namespace sgf 
 {

@@ -1,8 +1,8 @@
-#include "Triangle.hpp"
-#include "../Engine/Engine.hpp"
+#include "../../include/gui/Triangle.hpp"
+#include "../../include/engine/Engine.hpp"
 #include <algorithm>
-#include "../input/Mouse.hpp"
-#include "../Engine/ObjectManager.hpp"
+#include "../../include/input/Mouse.hpp"
+#include "../../include/engine/ObjectManager.hpp"
 
 namespace sgf
 { 
