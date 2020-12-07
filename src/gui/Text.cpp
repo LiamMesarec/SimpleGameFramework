@@ -5,7 +5,7 @@
 
 namespace sgf
 {
-    Text::Text(std::string text, const std::string& font, int fontSize, Color color, TextAlignment alignment)
+    Text::Text(const std::string& text, const std::string& font, int fontSize, Color color, TextAlignment alignment)
         : m_text{text}, m_font{font}, m_fontSize{fontSize}, m_color{color}, m_alignment{alignment},
         m_fontPtr{TTF_OpenFont(m_font.c_str(), m_fontSize)}, m_texturePtr{nullptr}, m_active{true}
     {
