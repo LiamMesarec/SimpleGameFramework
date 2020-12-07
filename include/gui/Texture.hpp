@@ -11,7 +11,7 @@ namespace sgf
     class Texture
     {
     public:
-        Texture(const std::string& path);
+        explicit Texture(const std::string& path) noexcept;
         [[nodiscard]]SDL_Texture* LoadTexture() const;
         void SetPath(const std::string& path);
         void SetContainerSize(int width, int height);

@@ -6,11 +6,8 @@
 
 namespace sgf
 {
-    Texture::Texture(const std::string& path) : m_texturePtr{nullptr}, m_path{""}, m_active{false}
+    Texture::Texture(const std::string& path) noexcept : m_texturePtr{nullptr}, m_path{path}, m_active{true}
     {
-        m_path = path;
-        m_active = true;
-
         MakeTexture();
     }
 
@@ -53,14 +50,14 @@ namespace sgf
     {
         SDL_Surface* loadedSurface = IMG_Load(m_path.c_str());
 
-        if(loadedSurface == nullptr)
+        if(!loadedSurface)
         {
             error::GetSDLError<error::Type::IMAGE>(m_path);
         }
         else
         {
             m_texturePtr = SDL_CreateTextureFromSurface(Engine::renderer, loadedSurface);
-            if(m_texturePtr == nullptr)
+            if(!m_texturePtr)
             {
                 error::GetSDLError("Texture failed to create", m_path);
             }

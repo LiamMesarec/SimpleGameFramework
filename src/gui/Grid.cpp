@@ -2,14 +2,9 @@
 
 namespace sgf 
 {
-    Grid::Grid(int squareHeight, int squareWidth, int height, int width, Vertex position)
+    Grid::Grid(int squareHeight, int squareWidth, std::size_t height, std::size_t width, Vertex position)
+        : m_height{height},  m_width{width}, m_squareHeight{squareHeight}, m_squareWidth{squareWidth}, m_position{position}
     {
-        m_squareHeight = squareHeight;
-        m_squareWidth = squareWidth;
-        m_height = height;
-        m_width = width;
-        m_position = position;
-        
         CreateBoard();
     }
 

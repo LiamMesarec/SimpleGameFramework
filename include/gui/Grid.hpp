@@ -9,7 +9,7 @@ namespace sgf
     class Grid
     {
     public:
-        Grid(int squareHeight, int squareWidth, int height, int width, Vertex position);
+        Grid(int squareHeight, int squareWidth, std::size_t height, std::size_t width, Vertex position);
         ~Grid();
 
         Polygon* Square(int ID);
