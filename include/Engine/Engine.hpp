@@ -13,19 +13,6 @@ namespace sgf
     class Engine 
     {
     public:
-        template<typename T>
-        static void OpenScene()
-        {   
-            ObjectManager::Init();
-            m_engine->OpenScene(std::make_unique<T>(m_engine));
-
-            if(!m_loop)
-            {
-                m_loop = true;
-                m_engine->Loop(renderer);
-            }
-        }
-
         template<typename T, typename ...Args>
         static void OpenScene(Args&&... args)
         {   
