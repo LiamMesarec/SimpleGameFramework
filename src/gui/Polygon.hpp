@@ -51,7 +51,7 @@ namespace sgf
         ~Polygon();
 
         template<typename ...Args>
-        void SetVertices(Vertex vertex, Args ...args)
+        void SetVertices(Vertex vertex, Args ...args) noexcept
         {
             m_vertices.clear();
             m_vertices.push_back(vertex);
@@ -75,7 +75,7 @@ namespace sgf
             }
         }
         void SetVertex(std::size_t position, Vertex vertex);
-        void AddVertex(Vertex vertex);
+        void AddVertex(Vertex vertex) noexcept;
         void SetPosition(float x, float y);
         void SetTransparency(bool transparency);
         void SetColor(Color color);

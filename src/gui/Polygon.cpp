@@ -14,27 +14,16 @@ namespace sgf
 
     void Polygon::SetVertex(std::size_t position, Vertex vertex)
     {
-        try
-        {
-            if(position - 1 > m_vertices.size() || position - 1 < m_vertices.size())
-            {
-                throw(position);
-            }
-        }
-        catch(int exception)
-        {
-            error::Exception("Polygon::SetVertex", "Argument 'position' is out of bounds.", position);
-        }
-        
         m_vertices.at(position - 1) = vertex;
         SetRectangleForm();
     }
 
-    void Polygon::AddVertex(Vertex vertex)
+    void Polygon::AddVertex(Vertex vertex) noexcept
     {
         m_vertices.pop_back();
         m_vertices.push_back(vertex);
         m_vertices.push_back(m_vertices.at(0));
+        SetRectangleForm();
     }
 
     void Polygon::SetPosition(float x, float y)
@@ -471,21 +460,21 @@ namespace sgf
     {
         SDL_Point* vertices = GetVerticesArray();
 
-        int lowestVertexY = vertices[0].y, highestVertexY = vertices[0].y;
-        int lowestVertexX = vertices[0].x, highestVertexX = vertices[0].x;
+        int minVertexY = vertices[0].y, maxVertexY = vertices[0].y;
+        int minVertexX = vertices[0].x, maxVertexX = vertices[0].x;
 
         for(auto&& vertex : m_vertices)
         {
-            if(lowestVertexY > vertex.y) lowestVertexY = vertex.y;
-            if(lowestVertexX > vertex.x) lowestVertexX = vertex.x;
-            if(highestVertexY < vertex.y) highestVertexY = vertex.y;
-            if(highestVertexX < vertex.x) highestVertexX = vertex.x;
+            if(minVertexY > vertex.y) minVertexY = vertex.y;
+            if(minVertexX > vertex.x) minVertexX = vertex.x;
+            if(maxVertexY < vertex.y) maxVertexY = vertex.y;
+            if(maxVertexX < vertex.x) maxVertexX = vertex.x;
         }
 
-        m_rectangleForm.x = GetCenterCoords().x - (highestVertexX - lowestVertexX)/2;
-        m_rectangleForm.y = GetCenterCoords().y - (highestVertexY - lowestVertexY)/2;
-        m_rectangleForm.h = highestVertexY - lowestVertexY; 
-        m_rectangleForm.w = highestVertexX - lowestVertexX;
+        m_rectangleForm.x = GetCenterCoords().x - (maxVertexX - minVertexX)/2;
+        m_rectangleForm.y = GetCenterCoords().y - (maxVertexY - minVertexY)/2;
+        m_rectangleForm.h = maxVertexY - minVertexY; 
+        m_rectangleForm.w = maxVertexX - minVertexX;
 
         if(HasActiveText())
         {
