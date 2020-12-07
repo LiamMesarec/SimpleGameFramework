@@ -20,6 +20,7 @@ namespace sgf
         static int GetWidth();
         static int GetHeight();
     private:
+        static void InitSDL();
         inline static Color m_color = color::noColor;
         inline static int m_width = 0;
         inline static int m_height = 0;

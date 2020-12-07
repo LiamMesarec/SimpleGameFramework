@@ -18,26 +18,7 @@ namespace sgf
         m_window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
         //Camera::SetSize(windowWidth, windowHeight);
 
-        if(m_window == nullptr)
-        {
-            error::GetSDLError("Window failed to create");
-            return;
-        }
-
-        m_surface = SDL_GetWindowSurface(m_window);
-
-        Engine::renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
-        if(Engine::renderer == nullptr)
-        {
-            error::GetSDLError("Renderer failed to create");
-            return;
-        }
-        SDL_SetRenderDrawColor(Engine::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-        if(TTF_Init() < 0) {
-            error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
-            return;
-        }
+        InitSDL();
     }
 
     void Window::Create(Resolution res, const std::string& name)
@@ -51,26 +32,7 @@ namespace sgf
         m_window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, res.width, res.height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
         //Camera::SetSize(res.width, res.height);
 
-        if(m_window == nullptr)
-        {
-            error::GetSDLError("Window failed to create");
-            return;
-        }
-
-        m_surface = SDL_GetWindowSurface(m_window);
-
-        Engine::renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
-        if(Engine::renderer == nullptr)
-        {
-            error::GetSDLError("Renderer failed to create");
-            return;
-        }
-        SDL_SetRenderDrawColor(Engine::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        
-        if(TTF_Init() < 0) {
-            error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
-            return;
-        }
+        InitSDL();  
     }
 
     void Window::Close()
@@ -111,5 +73,29 @@ namespace sgf
     int Window::GetHeight()
     {
         return m_height;
+    }
+
+    void Window::InitSDL()
+    {
+        if(m_window == nullptr)
+        {
+            error::GetSDLError("Window failed to create");
+            return;
+        }
+
+        m_surface = SDL_GetWindowSurface(m_window);
+
+        Engine::renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+        if(Engine::renderer == nullptr)
+        {
+            error::GetSDLError("Renderer failed to create");
+            return;
+        }
+        SDL_SetRenderDrawColor(Engine::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        
+        if(TTF_Init() < 0) {
+            error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
+            return;
+        }
     }
 }
