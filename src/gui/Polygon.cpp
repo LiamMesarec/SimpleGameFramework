@@ -102,9 +102,9 @@ namespace sgf
         m_texture = nullptr;
     }
 
-    void Polygon::SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment)
+    void Polygon::SetText(std::string text, std::string font, int fontSize, Color color)
     {
-        m_text = std::make_unique<Text>(text, font, fontSize, color, alignment);
+        m_text = std::make_unique<Text>(text, font, fontSize, color);
         m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
         m_text->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
     }
@@ -125,9 +125,9 @@ namespace sgf
         m_text->SetColor(color);
     }
 
-    void Polygon::SetTextAlignment(TextAlignment alignment)
+    void Polygon::SetTextAlignment(int x, int y, int width, int height)
     {
-        m_text->SetAlignment(alignment);
+        m_text->SetAlignment(x, y, width, height);
     }
     
     void Polygon::SetTextFontSize(int fontSize)
@@ -295,7 +295,7 @@ namespace sgf
 
                 if(HasActiveText())
                 {   
-                    m_text->Draw();
+                    m_text->Draw(m_angle);
                 }
 
             }

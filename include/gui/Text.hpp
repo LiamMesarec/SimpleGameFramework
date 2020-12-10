@@ -7,28 +7,19 @@
 
 namespace sgf
 {
-    enum TextAlignment
-    {
-        Left, 
-        Right, 
-        Center,         
-        Top,
-        Bottom,
-    };
-
     class Text
     {
     public:
-        Text(const std::string& text, const std::string& font, int fontSize, Color color, TextAlignment alignment);
+        Text(const std::string& text, const std::string& font, int fontSize, Color color);
         Text()
-            : m_text{""}, m_font{""}, m_fontSize{0}, m_color{noColor}, m_alignment{TextAlignment::Center},
-            m_fontPtr{nullptr}, m_texturePtr{nullptr}, m_active{false} {}
+            : m_text{""}, m_font{""}, m_fontSize{0}, m_color{noColor},
+            m_fontPtr{nullptr}, m_texturePtr{nullptr}, m_alignmentRect{0, 0, 0, 0}, m_active{false} {}
         ~Text();
         void SetText(const std::string& text);
         void SetFont(const std::string& font);
         void SetFontSize(int fontSize);
         void SetColor(const Color& color);
-        void SetAlignment(TextAlignment alignment);
+        void SetAlignment(int x, int y, int width, int height);
         void SetContainerSize(int width, int height);
         void SetContainerPosition(int x, int y);
 
@@ -36,7 +27,7 @@ namespace sgf
         std::string& GetText();
         std::string& GetFont();
 
-        void Draw();
+        void Draw(int angle);
         void Delete();
         bool IsDeleted() const;
     private:
@@ -47,11 +38,11 @@ namespace sgf
         std::string m_font;
         int m_fontSize;
         Color m_color;
-        TextAlignment m_alignment;
 
         TTF_Font* m_fontPtr;
         SDL_Texture* m_texturePtr;
         SDL_Rect m_rect;
+        SDL_Rect m_alignmentRect;
 
         bool m_active;
     };

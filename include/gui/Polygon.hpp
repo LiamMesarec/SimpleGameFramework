@@ -88,12 +88,12 @@ namespace sgf
         void RemoveOutline();
         void SetTexture(std::string path);
         void RemoveTexture();
-        void SetText(std::string text, std::string font, int fontSize, Color color, TextAlignment alignment);
+        void SetText(std::string text, std::string font, int fontSize, Color color);
         void RemoveText();
         void SetTextFont(std::string font);
         void SetTextFontSize(int fontSize);
         void SetTextColor(Color color);
-        void SetTextAlignment(TextAlignment alignment);
+        void SetTextAlignment(int x, int y, int width, int height);
 
         Vertex GetCenterCoords();
         int GetID() const;

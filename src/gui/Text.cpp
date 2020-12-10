@@ -5,11 +5,11 @@
 
 namespace sgf
 {
-    Text::Text(const std::string& text, const std::string& font, int fontSize, Color color, TextAlignment alignment)
-        : m_text{text}, m_font{font}, m_fontSize{fontSize}, m_color{color}, m_alignment{alignment},
-        m_fontPtr{TTF_OpenFont(m_font.c_str(), m_fontSize)}, m_texturePtr{nullptr}, m_active{true}
+    Text::Text(const std::string& text, const std::string& font, int fontSize, Color color)
+        : m_text{text}, m_font{font}, m_fontSize{fontSize}, m_color{color}, m_fontPtr{TTF_OpenFont(m_font.c_str(), m_fontSize)}, 
+        m_texturePtr{nullptr}, m_alignmentRect{0, 0, 0, 0}, m_active{true}
     {
-        MakeText();
+        
     }
 
     Text::~Text()
@@ -43,64 +43,66 @@ namespace sgf
         MakeText();
     }
 
-    void Text::SetAlignment(TextAlignment alignment)
+    void Text::SetAlignment(int x, int y, int width, int height)
     {
-        m_alignment = alignment;
-        switch(m_alignment)
-        {
-            case TextAlignment::Center:
-                break;
-            case TextAlignment::Left:
-                break;
-            case TextAlignment::Right:
-                break;
-            case TextAlignment::Top:
-                break;
-            case TextAlignment::Bottom:
-                break;
-        }  
+        m_alignmentRect.x = x;
+        m_alignmentRect.y = y;
+        m_alignmentRect.w = width;
+        m_alignmentRect.h = height;
     }
 
     void Text::SetContainerSize(int width, int height)
     {
         m_rect.w = width;    
         m_rect.h = height;
+        MakeText();
     }
 
     void Text::SetContainerPosition(int x, int y)
     {
         m_rect.x = x;
         m_rect.y = y;
+        MakeText();
     }
 
-    void Text::Draw()
+    void Text::Draw(int angle)
     {
+        m_rect.x += m_alignmentRect.x;
+        m_rect.y += m_alignmentRect.y;
+        m_rect.w += m_alignmentRect.w;
+        m_rect.h += m_alignmentRect.h;
         SDL_QueryTexture(m_texturePtr, nullptr, nullptr, &m_rect.w, &m_rect.h);
-        SDL_RenderCopy(Engine::renderer, m_texturePtr, nullptr, &m_rect);
+        SDL_RenderCopyEx(Engine::renderer, m_texturePtr, nullptr, &m_rect, angle, nullptr, SDL_FLIP_NONE);
     }
 
     void Text::MakeText()
     {
         m_texturePtr = nullptr;
 
-        if(!m_active) m_active = true;
+        if(!m_active) 
+        {
+            m_active = true;
+        }
 
-        SDL_Surface* loadedSurface = TTF_RenderText_Blended(m_fontPtr, m_text.c_str(), 
-                {
-                    static_cast<Uint8>(m_color.r), 
-                    static_cast<Uint8>(m_color.g), 
-                    static_cast<Uint8>(m_color.b), 
-                    static_cast<Uint8>(m_color.a)
-                });
+        SDL_Surface* loadedSurface = TTF_RenderText_Blended_Wrapped(
+            m_fontPtr, m_text.c_str(), 
+            {
+                static_cast<Uint8>(m_color.r), 
+                static_cast<Uint8>(m_color.g), 
+                static_cast<Uint8>(m_color.b), 
+                static_cast<Uint8>(m_color.a)
+            },
+            m_rect.w
+            );
 
-        if(loadedSurface == nullptr)
+        if(!loadedSurface)
         {
             error::GetSDLError<error::Type::TTF>(m_text);
         }
         else
         {
             m_texturePtr = SDL_CreateTextureFromSurface(Engine::renderer, loadedSurface);
-            if(m_texturePtr == nullptr)
+            if(!m_texturePtr)
             {
                 error::GetSDLError("Text failed to create", m_text);
             }
