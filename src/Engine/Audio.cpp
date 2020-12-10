@@ -2,7 +2,6 @@
 #include "../../include/engine/Error.hpp"
 #include <filesystem>
 #include <iostream>
-#include <algorithm>
 #include "../../include/math/Random.hpp"
 
 namespace sgf
@@ -34,6 +33,21 @@ namespace sgf
         {
             return Mix_PlayingMusic() == 1 ? true : false;
         }
+
+        void SetChannelVolume(std::size_t channelID, int volume)
+        {
+            if(volume > 128) 
+            {
+                volume = 128;
+            }
+
+            Mix_Volume(channelID, volume);
+        }
+    }
+
+    void Audio::SetVolume(int volume)
+    {
+        SetChannelVolume(-1, volume);
     }
 
     void SoundEffect::Load(const std::string& path)
@@ -55,7 +69,7 @@ namespace sgf
 
     void SoundEffect::Play()
     {
-        Mix_PlayChannel(-1, m_soundEffect, 0);
+        m_channelID = Mix_PlayChannel(-1, m_soundEffect, 0);
     }
 
     void Music::Load(const std::string& path)
@@ -74,7 +88,7 @@ namespace sgf
             error::GetSDLError<error::Type::MIXER>("Cannot load music");
         }
 
-        m_loop = 1;
+        m_loop = 0;
     }
 
     bool Music::IsPlaying()
@@ -94,7 +108,7 @@ namespace sgf
 
     void Music::Play()
     {
-        Mix_PlayMusic(m_music, m_loop);
+        m_channelID = Mix_PlayMusic(m_music, m_loop);
     }
 
     void Music::Pause()
@@ -116,6 +130,9 @@ namespace sgf
     {
         std::string str;
         std::size_t found; 
+
+        m_tracks.clear();
+
         for(auto&& entry : std::filesystem::directory_iterator(path))
         {
             str = entry.path().string();
@@ -131,7 +148,7 @@ namespace sgf
         }
 
         m_it = 0;
-        m_loop = 1;
+        m_loop = 0;
     }
 
     void Playlist::Shuffle()
@@ -155,7 +172,7 @@ namespace sgf
         {
             m_music = nullptr;
             m_music = Mix_LoadMUS(m_tracks.at(m_it).c_str());
-            Mix_PlayMusic(m_music, -1);
+            m_channelID = Mix_PlayMusic(m_music, m_loop);
             m_it++;
         }
     }
@@ -184,7 +201,7 @@ namespace sgf
     {
         if(!IsPlaying())
         {
-            if(m_it > 0)
+            if(m_it > 0 && m_it < m_tracks.size())
             {
                 Play();
             }
@@ -195,5 +212,20 @@ namespace sgf
     {
         StopMusic();
         m_it = 0;
+    }
+
+    void Playlist::SetVolume(int volume)
+    {
+        SetChannelVolume(m_channelID, volume);
+    }
+
+    void Music::SetVolume(int volume)
+    {
+        SetChannelVolume(m_channelID, volume);
+    }
+
+    void SoundEffect::SetVolume(int volume)
+    {
+        SetChannelVolume(m_channelID, volume);
     }
 }

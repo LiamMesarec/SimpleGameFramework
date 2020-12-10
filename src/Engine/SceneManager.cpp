@@ -10,17 +10,16 @@ namespace sgf
 
     SceneManager::~SceneManager() 
     {
-        while (!scenes.empty()) 
-        {
-            scenes.pop_back();
-        }
+        scenes.clear();
     }
     
     void SceneManager::OpenScene(std::shared_ptr<Scene> scene) 
     {
-        if (GetCurrentScene() != nullptr) 
+        if(GetCurrentScene()) 
+        {
             scenes.pop_back();
-            
+        }
+
         scenes.push_back(scene);
     }
 
@@ -33,7 +32,7 @@ namespace sgf
     {
         while(true) 
         {
-            if (GetCurrentScene() == nullptr)
+            if (!GetCurrentScene())
             {
                 continue;
             }
