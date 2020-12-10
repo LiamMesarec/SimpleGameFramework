@@ -7,7 +7,7 @@ namespace sgf::error
 {
     enum class Type
     {
-        IMAGE, TTF
+        IMAGE, TTF, MIXER
     };
 
     void GetSDLError(const std::string& message);

@@ -4,6 +4,7 @@
 #include "../../include/engine/Error.hpp"
 #include "../../include/engine/Camera.hpp"
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 namespace sgf 
 {
@@ -40,6 +41,7 @@ namespace sgf
         SDL_DestroyRenderer(Engine::renderer);
         SDL_DestroyWindow(m_window);      	
         TTF_Quit();
+        Mix_Quit();
         SDL_Quit();
     }
 
@@ -50,7 +52,7 @@ namespace sgf
 
     void Window::RemoveBackgroundColor()
     {
-        m_color = color::noColor;
+        m_color = noColor;
     }
 
     Color Window::GetBackgroundColor()
@@ -95,6 +97,12 @@ namespace sgf
         
         if(TTF_Init() < 0) {
             error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
+            return;
+        }
+
+        if(Mix_OpenAudio(44100, AUDIO_S16LSB, 2, 2048 ) < 0)
+        {
+            error::GetSDLError<error::Type::MIXER>("Mixer failed to initialize");
             return;
         }
     }

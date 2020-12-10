@@ -75,7 +75,7 @@ namespace sgf
 
     void Polygon::RemoveColor()
     {
-        m_color = color::noColor;
+        m_color = noColor;
     }
 
     void Polygon::SetOutline(Color color)
@@ -275,7 +275,7 @@ namespace sgf
 
             if(!m_isTransparent)
             {
-                if(m_color != color::noColor)
+                if(m_color != noColor)
                 {
                     SDL_SetRenderDrawColor(
                         sgf::Engine::renderer,
@@ -350,8 +350,8 @@ namespace sgf
     //http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
     void Polygon::FillBottomTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3)
     {
-        float slope1 = float(v3.x - v1.x) / float(v3.y - v1.y);
-        float slope2 = float(v3.x - v2.x) / float(v3.y - v2.y);
+        float slope1 = static_cast<float>(v3.x - v1.x) / static_cast<float>(v3.y - v1.y);
+        float slope2 = static_cast<float>(v3.x - v2.x) / static_cast<float>(v3.y - v2.y);
         
         float x1 = v3.x;
         float x2 = v3.x + 0.5f;

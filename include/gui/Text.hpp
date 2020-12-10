@@ -21,7 +21,7 @@ namespace sgf
     public:
         Text(const std::string& text, const std::string& font, int fontSize, Color color, TextAlignment alignment);
         Text()
-            : m_text{""}, m_font{""}, m_fontSize{0}, m_color{color::noColor}, m_alignment{TextAlignment::Center},
+            : m_text{""}, m_font{""}, m_fontSize{0}, m_color{noColor}, m_alignment{TextAlignment::Center},
             m_fontPtr{nullptr}, m_texturePtr{nullptr}, m_active{false} {}
         ~Text();
         void SetText(const std::string& text);

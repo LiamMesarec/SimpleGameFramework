@@ -14,8 +14,8 @@ namespace sgf
         static void UpdateObject(int ID, const std::vector<Vertex>& polygon);
         static void DeleteObject(int ID);
 
-        inline static std::unordered_map<int, std::vector<Vertex>> objects;
     private:
+        inline static std::unordered_map<int, std::vector<Vertex>> m_objects;
         inline static int m_ID;
     };
 }
