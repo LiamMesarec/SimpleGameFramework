@@ -17,7 +17,7 @@ namespace sgf
         void SetContainerSize(int width, int height);
         void SetContainerPosition(int x, int y);
 
-        void Draw();
+        void Draw(int angle);
         void Delete();
         bool IsDeleted() const;
     private:

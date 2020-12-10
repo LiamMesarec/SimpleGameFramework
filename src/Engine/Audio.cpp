@@ -163,7 +163,7 @@ namespace sgf
 
     void Playlist::Play()
     {
-        if(m_it > 0)
+        if(m_it > 0 && m_it != m_tracks.size())
         {
             Mix_FreeMusic(m_music);
         }

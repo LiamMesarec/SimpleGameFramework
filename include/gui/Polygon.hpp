@@ -23,7 +23,8 @@ namespace sgf
         template<typename ...Args>
         Polygon(Vertex vertex, Args ...args) noexcept 
             :  m_ID{-1}, m_color{noColor}, m_outlineColor{noColor}, m_hasOutline{false}, 
-                m_isTransparent{false}, m_isDeleted{false}, m_texture{nullptr}, m_text{nullptr}
+                m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, m_texture{nullptr}, 
+                m_text{nullptr}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
@@ -45,7 +46,8 @@ namespace sgf
 
         Polygon() noexcept 
             : m_ID{-1}, m_color{noColor}, m_outlineColor{noColor}, m_hasOutline{false}, 
-                m_isTransparent{false}, m_isDeleted{false}, m_texture{nullptr},  m_text{nullptr}
+                m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, m_texture{nullptr}, 
+                m_text{nullptr}
         {}
 
         ~Polygon();
@@ -73,6 +75,8 @@ namespace sgf
                 m_texture->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
                 m_texture->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
             }
+
+            m_angle = 0;
         }
         void SetVertex(std::size_t position, Vertex vertex);
         void AddVertex(Vertex vertex) noexcept;
@@ -124,6 +128,7 @@ namespace sgf
         bool m_isDeleted;
 
         SDL_Rect m_rectangleForm;
+        int m_angle;
 
         std::unique_ptr<Texture> m_texture;
         std::unique_ptr<Text> m_text;

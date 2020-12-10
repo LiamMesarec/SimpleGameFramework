@@ -66,8 +66,8 @@ namespace sgf
         }
     }
 
-    void Texture::Draw()
+    void Texture::Draw(int angle)
     {
-        SDL_RenderCopy(Engine::renderer, m_texturePtr, nullptr, &m_rect);
+       SDL_RenderCopyEx(Engine::renderer, m_texturePtr, nullptr, &m_rect, angle, nullptr, SDL_FLIP_NONE);
     }
 }

@@ -51,7 +51,6 @@ namespace sgf
             case TextAlignment::Center:
                 break;
             case TextAlignment::Left:
-
                 break;
             case TextAlignment::Right:
                 break;

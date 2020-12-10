@@ -264,6 +264,7 @@ namespace sgf
                 }                
             }
             
+            m_angle += degrees;
         }
     }
 
@@ -289,7 +290,7 @@ namespace sgf
 
                 if(HasActiveTexture())
                 {   
-                    m_texture->Draw();
+                    m_texture->Draw(m_angle);
                 }
 
                 if(HasActiveText())

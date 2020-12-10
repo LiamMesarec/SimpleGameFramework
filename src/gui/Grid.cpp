@@ -16,39 +16,31 @@ namespace sgf
 
     Polygon* Grid::Square(int ID)
     {
-        try
-        {
-            if(ID < 0 || static_cast<std::size_t>(ID) > (GetSquareCount() - 1))
-            {
-                throw(ID);
-            }
-        }
-        catch(int exception)
-        {
-            error::Exception("Grid::Square", "Argument 'ID' is out of bounds.", ID);
-        }
-
         return &m_polygons[ID];
     }
 
     void Grid::SetHeight(int height) 
     {
         m_height = height;
+        CreateBoard();
     }
 
     void Grid::SetWidth(int width)
     {
         m_width = width;
+        CreateBoard();
     }
 
     void Grid::SetSquareHeight(int squareHeight)
     {
         m_squareHeight = squareHeight;
+        CreateBoard();
     }
 
     void Grid::SetSquareWidth(int squareWidth)
     {
         m_squareWidth = squareWidth;
+        CreateBoard();
     }
 
     int Grid::GetHeight() const
