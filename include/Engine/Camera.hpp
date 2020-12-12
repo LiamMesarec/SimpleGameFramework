@@ -1,16 +1,31 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "Window.hpp"
+#include "SceneManager.hpp"
 
 namespace sgf
 {
     class Camera 
     {
     public:
-        static void SetSize(int width, int height);
-        static void SetPosition(int x, int y);
-        static void Move(int x, int y);
+        static void Init();
+        static void SetCameraSize(int width, int height);
+        static void SetSceneSize(int width, int height);
+        static void SetZoomLevel(float zoom);
+        static void SetPosition(float x, float y);
+        static void Move(float x, float y);
+
+        static SDL_Rect& GetCamera();
+        static SDL_Rect& GetSceneDimensions();
+
+        static bool IsEnabled();
     private:
-        inline static SDL_Rect camera {0, 0, Window::GetWidth(), Window::GetHeight()};
+        inline static SDL_Rect m_camera {0, 0, 0, 0};
+        inline static SDL_Rect m_sceneDimensions {0, 0, 0, 0};
+
+        inline static int m_startingWidth = 0;
+        inline static int m_startingHeight = 0;
+
+        inline static bool m_isEnabled = false;
     };
 }

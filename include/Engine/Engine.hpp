@@ -5,7 +5,6 @@
 #include "Scene.hpp"
 #include "ObjectManager.hpp"
 #include "../gui/Texture.hpp"
-#include <any>
 
 namespace sgf
 {
@@ -22,7 +21,7 @@ namespace sgf
             if(!m_loop)
             {
                 m_loop = true;
-                m_engine->Loop(renderer);
+                m_engine->Loop();
             }
         }
 

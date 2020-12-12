@@ -496,9 +496,10 @@ namespace sgf
     {
         SDL_Point* vertices = new SDL_Point[m_vertices.size()];
 
-        for(std::size_t i = 0; i < m_vertices.size(); i++)
+        for(int i = 0; auto&& vertex : m_vertices)
         {
-            vertices[i] = { static_cast<int>(m_vertices.at(i).x), static_cast<int>(m_vertices.at(i).y)};
+            vertices[i] = { static_cast<int>(vertex.x), static_cast<int>(vertex.y)};
+            i++;
         }   
 
         return vertices;        

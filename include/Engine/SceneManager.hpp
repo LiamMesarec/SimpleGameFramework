@@ -14,9 +14,10 @@ namespace sgf
 
         void OpenScene(std::shared_ptr<Scene> scene);
         std::shared_ptr<Scene> GetCurrentScene() const;
-        void Loop(SDL_Renderer* renderer);
+        void Loop();
 
     private:
+        SDL_Texture* m_screen;
         std::vector<std::shared_ptr<Scene>> scenes;
     };
 }

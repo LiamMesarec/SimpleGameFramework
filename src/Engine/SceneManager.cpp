@@ -1,11 +1,12 @@
 #include "../../include/engine/SceneManager.hpp"
 #include "../../include/engine/Window.hpp"
-
+#include "../../include/engine/Camera.hpp"
+#include "../../include/engine/Engine.hpp"
 namespace sgf
 {
     SceneManager::SceneManager() noexcept
     {
-
+        
     }
 
     SceneManager::~SceneManager() 
@@ -15,6 +16,10 @@ namespace sgf
     
     void SceneManager::OpenScene(std::shared_ptr<Scene> scene) 
     {
+        m_screen = nullptr;
+        m_screen = SDL_CreateTexture(Engine::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 
+            5000, 5000);
+
         if(GetCurrentScene()) 
         {
             scenes.pop_back();
@@ -28,7 +33,7 @@ namespace sgf
         return scenes.empty() ? nullptr : scenes.back();
     }
 
-    void SceneManager::Loop(SDL_Renderer* renderer) 
+    void SceneManager::Loop() 
     {
         while(true) 
         {
@@ -36,8 +41,10 @@ namespace sgf
             {
                 continue;
             }
+
+            SDL_SetRenderTarget(Engine::renderer, m_screen);
             
-            SDL_SetRenderDrawColor(renderer, 
+            SDL_SetRenderDrawColor(Engine::renderer,  
                 Window::GetBackgroundColor().r, 
                 Window::GetBackgroundColor().g,
                 Window::GetBackgroundColor().b,
@@ -46,7 +53,7 @@ namespace sgf
 
             SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
-            SDL_RenderClear(renderer);
+            SDL_RenderClear(Engine::renderer);
 
             GetCurrentScene()->HandleInput();
 
@@ -54,9 +61,14 @@ namespace sgf
 
             GetCurrentScene()->Render();
 
-            SDL_RenderSetScale(renderer, 1, 1);
+            SDL_RenderSetScale(Engine::renderer, 1, 1);
+            
+            SDL_SetRenderTarget(Engine::renderer, NULL);
 
-            SDL_RenderPresent(renderer);
+
+            SDL_RenderCopy(Engine::renderer, m_screen, &Camera::GetSceneDimensions(), &Camera::GetCamera());
+
+            SDL_RenderPresent(Engine::renderer);
 
             //TODO: Chrono za SDL_Delay
             SDL_Delay(25);
