@@ -2,7 +2,6 @@ libraries/
 debug/
 .vscode/
 fonts/
-tictactoe/
 scene2.cpp
 scene2.hpp
 TestScene.hpp
