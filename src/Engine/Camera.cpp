@@ -5,7 +5,6 @@ namespace sgf
 {
     void Camera::Init()
     {
-        m_isEnabled = true;
         m_camera.w = Window::GetWidth();
         m_camera.h = Window::GetHeight();
     }
@@ -24,8 +23,14 @@ namespace sgf
 
     void Camera::Move(float x, float y)
     {
-        m_camera.x += x;
-        m_camera.y += y;
+        if(m_camera.x < m_sceneDimensions.x + x && m_camera.x > 0)
+        {
+            m_camera.x += x;
+        }
+        if(m_camera.y < m_sceneDimensions.y + y && m_camera.y > 0)
+        {
+            m_camera.y += y;
+        }        
     }
 
     void Camera::SetZoomLevel(float zoom)
@@ -48,10 +53,5 @@ namespace sgf
     SDL_Rect& Camera::GetSceneDimensions()
     {
         return m_sceneDimensions;
-    }
-
-    bool Camera::IsEnabled()
-    {
-        return m_isEnabled;
     }
 }

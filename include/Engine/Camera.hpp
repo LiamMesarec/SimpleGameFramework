@@ -17,15 +17,11 @@ namespace sgf
 
         static SDL_Rect& GetCamera();
         static SDL_Rect& GetSceneDimensions();
-
-        static bool IsEnabled();
     private:
         inline static SDL_Rect m_camera {0, 0, 0, 0};
         inline static SDL_Rect m_sceneDimensions {0, 0, 0, 0};
 
         inline static int m_startingWidth = 0;
         inline static int m_startingHeight = 0;
-
-        inline static bool m_isEnabled = false;
     };
 }

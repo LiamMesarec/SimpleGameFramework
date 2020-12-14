@@ -17,7 +17,6 @@ namespace sgf
         }
 
         m_window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-        //Camera::SetSize(windowWidth, windowHeight);
 
         InitSDL();
     }
@@ -30,9 +29,8 @@ namespace sgf
             return;
         }
 
-        m_window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, res.width, res.height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-        //Camera::SetSize(res.width, res.height);
-
+        m_window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, res.width, res.height, SDL_WINDOW_SHOWN);
+      
         InitSDL();  
     }
 
