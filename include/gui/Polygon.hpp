@@ -17,6 +17,18 @@ namespace sgf
         Left, Right
     };
 
+    enum class Shape
+    { 
+        UserDefined,
+        Triangle, 
+        Square, 
+        Rectangle,
+        Circle,
+        Eclipse
+    };
+
+    static constexpr int noID = -1;
+
     class Polygon
     {
     public:
@@ -24,31 +36,23 @@ namespace sgf
         Polygon(Vertex vertex, Args ...args) noexcept 
             :  m_ID{-1}, m_color{noColor}, m_outlineColor{noColor}, m_hasOutline{false}, 
                 m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, m_texture{nullptr}, 
-                m_text{nullptr}
+                m_text{nullptr}, m_shape{Shape::UserDefined}
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
             m_vertices.push_back(vertex);
 
             m_ID = ObjectManager::NewObject(m_vertices);
-            SetRectangleForm();
-            if(HasActiveText())
-            {   
-                m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
-                m_text->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
-            }
-            if(HasActiveTexture())
-            {   
-                m_texture->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
-                m_texture->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
-            }
         }
 
         Polygon() noexcept 
             : m_ID{-1}, m_color{noColor}, m_outlineColor{noColor}, m_hasOutline{false}, 
                 m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, m_texture{nullptr}, 
-                m_text{nullptr}
+                m_text{nullptr}, m_shape{Shape::UserDefined}
         {}
+
+        Polygon(float x, float y, float width, float height) noexcept;
+        Polygon(float x, float y, float a) noexcept;
 
         ~Polygon();
 
@@ -64,6 +68,7 @@ namespace sgf
             {
                 m_ID = ObjectManager::NewObject(m_vertices);
             }
+
             SetRectangleForm();
             if(HasActiveText())
             {   
@@ -77,6 +82,7 @@ namespace sgf
             }
 
             m_angle = 0;
+            m_shape = Shape::UserDefined;
         }
         void SetVertex(std::size_t position, Vertex vertex);
         void AddVertex(Vertex vertex) noexcept;
@@ -133,6 +139,6 @@ namespace sgf
         std::unique_ptr<Texture> m_texture;
         std::unique_ptr<Text> m_text;
 
-        const int noID = -1;
+        sgf::Shape m_shape;
     };
 }

@@ -9,7 +9,6 @@ TicTacToe::TicTacToe([[maybe_unused]] sgf::SceneManagerPtr scene)
     sgf::Camera::SetSceneSize(sgf::R_720P.width, sgf::R_720P.height);
     sgf::Camera::SetCameraSize(sgf::R_720P.width, sgf::R_720P.height);
 
-    //sgf::Camera::SetZoomLevel(1.2);
     for(auto& square : board)
     {
         square.SetOutline(sgf::Color{0, 0, 0, 0});

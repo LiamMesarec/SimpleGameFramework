@@ -7,6 +7,33 @@
 
 namespace sgf
 {
+
+    Polygon::Polygon(float x, float y, float width, float height) noexcept 
+    {
+        m_vertices.reserve(5);
+        m_vertices.emplace_back(sgf::Vertex{x, y});
+        m_vertices.emplace_back(sgf::Vertex{x + width, y});
+        m_vertices.emplace_back(sgf::Vertex{x + width, y + height});
+        m_vertices.emplace_back(sgf::Vertex{x, y + width});
+        m_vertices.emplace_back(sgf::Vertex{x, y});
+
+        m_ID = ObjectManager::NewObject(m_vertices);
+        m_shape = Shape::Rectangle;
+    }
+
+    Polygon::Polygon(float x, float y, float a) noexcept
+    {
+        m_vertices.reserve(5);
+        m_vertices.emplace_back(sgf::Vertex{x, y});
+        m_vertices.emplace_back(sgf::Vertex{x + a, y});
+        m_vertices.emplace_back(sgf::Vertex{x + a, y + a});
+        m_vertices.emplace_back(sgf::Vertex{x, y + a});
+        m_vertices.emplace_back(sgf::Vertex{x, y});
+
+        m_ID = ObjectManager::NewObject(m_vertices);
+        m_shape = Shape::Square;
+    }
+
     Polygon::~Polygon()
     {
         Delete();
