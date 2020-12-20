@@ -8,7 +8,6 @@ namespace sgf
     class Camera 
     {
     public:
-        static void Init();
         static void SetCameraSize(int width, int height);
         static void SetSceneSize(int width, int height);
         static void SetZoomLevel(float zoom);
@@ -17,11 +16,16 @@ namespace sgf
 
         static SDL_Rect& GetCamera();
         static SDL_Rect& GetSceneDimensions();
+
+        static void RenderWithCamera();
+        static void RenderScene();
     private:
         inline static SDL_Rect m_camera {0, 0, 0, 0};
         inline static SDL_Rect m_sceneDimensions {0, 0, 0, 0};
 
         inline static int m_startingWidth = 0;
         inline static int m_startingHeight = 0;
+
+        inline static SDL_Texture* m_screen = nullptr;
     };
 }

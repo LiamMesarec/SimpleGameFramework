@@ -17,7 +17,6 @@ namespace sgf
         void Loop();
 
     private:
-        SDL_Texture* m_screen;
         std::vector<std::shared_ptr<Scene>> scenes;
     };
 }

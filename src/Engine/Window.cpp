@@ -37,7 +37,7 @@ namespace sgf
     void Window::Close()
     {
         SDL_DestroyRenderer(Engine::renderer);
-        SDL_DestroyWindow(m_window);      	
+        SDL_DestroyWindow(m_window);     	
         TTF_Quit();
         Mix_Quit();
         SDL_Quit();

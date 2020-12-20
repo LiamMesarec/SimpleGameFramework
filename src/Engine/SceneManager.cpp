@@ -2,6 +2,7 @@
 #include "../../include/engine/Window.hpp"
 #include "../../include/engine/Camera.hpp"
 #include "../../include/engine/Engine.hpp"
+
 namespace sgf
 {
     SceneManager::SceneManager() noexcept
@@ -20,11 +21,7 @@ namespace sgf
         {
             scenes.pop_back();
         }
-
-        m_screen = nullptr;
-        m_screen = SDL_CreateTexture(Engine::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 
-            Camera::GetSceneDimensions().w, Camera::GetSceneDimensions().h);
-
+        
         scenes.push_back(scene);
     }
 
@@ -42,7 +39,7 @@ namespace sgf
                 continue;
             }
 
-            SDL_SetRenderTarget(Engine::renderer, m_screen);
+            Camera::RenderWithCamera();
             
             SDL_SetRenderDrawColor(Engine::renderer,  
                 Window::GetBackgroundColor().r, 
@@ -65,8 +62,7 @@ namespace sgf
             
             SDL_SetRenderTarget(Engine::renderer, NULL);
 
-            SDL_RenderCopy(Engine::renderer, m_screen, &Camera::GetSceneDimensions(), &Camera::GetCamera());
-            //SDL_RenderCopy(Engine::renderer, m_screen, &Camera::GetCamera(), &Camera::GetSceneDimensions());
+            Camera::RenderScene();
 
             SDL_RenderPresent(Engine::renderer);
 
