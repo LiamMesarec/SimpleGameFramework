@@ -129,11 +129,10 @@ namespace sgf
     void Playlist::Load(const std::string& path)
     {
         std::string str;
-        std::size_t found; 
 
         m_tracks.clear();
 
-        for(auto&& entry : std::filesystem::directory_iterator(path))
+        for(std::string::size_type found; auto&& entry : std::filesystem::directory_iterator(path))
         {
             str = entry.path().string();
 
