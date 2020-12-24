@@ -62,6 +62,7 @@ namespace sgf
 
     void Camera::RenderScene()
     {
-        SDL_RenderCopy(Engine::renderer, m_screen, &m_camera, &m_sceneDimensions);
+        //SDL_RenderCopy(Engine::renderer, m_screen, &m_camera, &m_sceneDimensions);
+        SDL_RenderCopy(Engine::renderer, m_screen, &m_sceneDimensions, &m_camera);
     }
 }

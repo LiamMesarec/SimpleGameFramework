@@ -38,9 +38,9 @@ int Bot::Minimax(Square squares[9], Square turn, bool minimaxing)
     for(int i = 0; i < 9; i++) {
         if(squares[i] == Square::none) 
         { 
-            for(int i = 0; i < 9; i++)
+            for(int j = 0; j < 9; j++)
             {
-                testBoard[i] = squares[i];
+                testBoard[j] = squares[j];
             }
             testBoard[i] = turn;
             int newMoveScore = -Minimax(testBoard, GetOpponent(turn), true);
