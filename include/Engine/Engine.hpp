@@ -16,6 +16,7 @@ namespace sgf
         static void OpenScene(Args&&... args)
         {   
             ObjectManager::Init();
+
             m_engine->OpenScene(std::make_unique<T>(m_engine, std::forward<Args>(args)...));
 
             if(!m_loop)

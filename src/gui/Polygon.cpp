@@ -4,6 +4,7 @@
 #include <cmath>
 #include "../../include/math/Constants.hpp"
 #include "../../include/math/Functions.hpp"
+#include "../../include/engine/Time.hpp"
 
 namespace sgf
 {
@@ -127,6 +128,11 @@ namespace sgf
     {
         m_texture->Delete();
         m_texture = nullptr;
+    }
+
+    void Polygon::SetTextureAlpha(int alpha)
+    {
+        m_texture->SetAlpha(alpha);
     }
 
     void Polygon::SetText(std::string text, std::string font, int fontSize, Color color)
@@ -329,16 +335,18 @@ namespace sgf
 
             if(m_hasOutline)
             {
+
                 SDL_SetRenderDrawColor(
-                    sgf::Engine::renderer,
+                    Engine::renderer,
                     m_outlineColor.r,
                     m_outlineColor.g,
                     m_outlineColor.b,
                     m_outlineColor.a
                 );
+
                 SDL_RenderDrawLines(Engine::renderer, vertices, m_vertices.size());
             }
-
+            
             delete[] vertices;
         }
     }
@@ -369,6 +377,7 @@ namespace sgf
             points[0] = {static_cast<int>(x1), y};
             points[1] = {static_cast<int>(x2), y};
             SDL_RenderDrawLines(sgf::Engine::renderer, points, numPoints);
+            //Draw::Line({points[0].x, points[0].y}, {points[1].x, points[1].y}, m_color);
             x1 += slope1;
             x2 += slope2;
         }
@@ -400,6 +409,7 @@ namespace sgf
             points[0] = {static_cast<int>(x1), y};
             points[1] = {static_cast<int>(x2), y};
             SDL_RenderDrawLines(sgf::Engine::renderer, points, numPoints);
+            //Draw::Line({points[0].x, points[0].y}, {points[1].x, points[1].y}, m_color);
             x1 -= slope1;
             x2 -= slope2;
         }       

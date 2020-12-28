@@ -92,7 +92,8 @@ namespace sgf
             return;
         }
         SDL_SetRenderDrawColor(Engine::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        
+        SDL_SetRenderDrawBlendMode(Engine::renderer, SDL_BLENDMODE_BLEND);
+
         if(TTF_Init() < 0) {
             error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
             return;

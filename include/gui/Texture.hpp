@@ -14,6 +14,7 @@ namespace sgf
         explicit Texture(const std::string& path) noexcept;
         [[nodiscard]]SDL_Texture* LoadTexture() const;
         void SetPath(const std::string& path);
+        void SetAlpha(int alpha);
         void SetContainerSize(int width, int height);
         void SetContainerPosition(int x, int y);
 

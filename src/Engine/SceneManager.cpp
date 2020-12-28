@@ -2,6 +2,8 @@
 #include "../../include/engine/Window.hpp"
 #include "../../include/engine/Camera.hpp"
 #include "../../include/engine/Engine.hpp"
+#include "../../include/engine/Time.hpp"
+#include <iostream>
 
 namespace sgf
 {
@@ -34,6 +36,8 @@ namespace sgf
     {
         while(true) 
         {
+            FPS::Start();
+
             if (!GetCurrentScene())
             {
                 continue;
@@ -56,8 +60,10 @@ namespace sgf
 
             GetCurrentScene()->Update();
 
+            //Draw::Start();
             GetCurrentScene()->Render();
-
+            //Draw::End();
+            
             SDL_RenderSetScale(Engine::renderer, 1, 1);
             
             SDL_SetRenderTarget(Engine::renderer, NULL);
@@ -66,8 +72,7 @@ namespace sgf
 
             SDL_RenderPresent(Engine::renderer);
 
-            //TODO: Chrono za SDL_Delay
-            SDL_Delay(25);
+            FPS::Wait();
         }
     }
 }

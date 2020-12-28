@@ -16,10 +16,15 @@ namespace sgf
         return m_texturePtr;
     }
 
+    void Texture::SetAlpha(int alpha)
+    {
+        SDL_SetTextureAlphaMod(m_texturePtr, alpha);
+    }
+
     void Texture::SetPath(const std::string& path)
     {
         m_path = path;
-
+        MakeTexture();
     }
 
     void Texture::SetContainerSize(int width, int height)
@@ -64,6 +69,8 @@ namespace sgf
 
             SDL_FreeSurface(loadedSurface);
         }
+
+        SDL_SetTextureBlendMode(m_texturePtr, SDL_BLENDMODE_BLEND);
     }
 
     void Texture::Draw(int angle)

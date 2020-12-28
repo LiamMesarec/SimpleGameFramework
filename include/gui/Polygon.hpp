@@ -94,6 +94,7 @@ namespace sgf
         void RemoveOutline();
         void SetTexture(std::string path);
         void RemoveTexture();
+        void SetTextureAlpha(int alpha);
         void SetText(std::string text, std::string font, int fontSize, Color color);
         void RemoveText();
         void SetTextFont(std::string font);
