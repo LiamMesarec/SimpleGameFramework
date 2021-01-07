@@ -377,7 +377,6 @@ namespace sgf
             points[0] = {static_cast<int>(x1), y};
             points[1] = {static_cast<int>(x2), y};
             SDL_RenderDrawLines(sgf::Engine::renderer, points, numPoints);
-            //Draw::Line({points[0].x, points[0].y}, {points[1].x, points[1].y}, m_color);
             x1 += slope1;
             x2 += slope2;
         }
@@ -409,7 +408,6 @@ namespace sgf
             points[0] = {static_cast<int>(x1), y};
             points[1] = {static_cast<int>(x2), y};
             SDL_RenderDrawLines(sgf::Engine::renderer, points, numPoints);
-            //Draw::Line({points[0].x, points[0].y}, {points[1].x, points[1].y}, m_color);
             x1 -= slope1;
             x2 -= slope2;
         }       

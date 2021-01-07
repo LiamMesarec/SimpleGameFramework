@@ -60,13 +60,11 @@ namespace sgf
 
             GetCurrentScene()->Update();
 
-            //Draw::Start();
             GetCurrentScene()->Render();
-            //Draw::End();
             
             SDL_RenderSetScale(Engine::renderer, 1, 1);
             
-            SDL_SetRenderTarget(Engine::renderer, NULL);
+            SDL_SetRenderTarget(Engine::renderer, nullptr);
 
             Camera::RenderScene();
 
