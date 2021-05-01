@@ -4,7 +4,7 @@ namespace sgf
 {
     struct Color
     {
-        int r, g, b, a;
+        int r, g, b, a = 0;
 
         bool operator==(const Color& other)
         {

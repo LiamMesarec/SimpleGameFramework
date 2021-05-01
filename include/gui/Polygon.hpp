@@ -23,10 +23,7 @@ namespace sgf
         Triangle, 
         Square, 
         Rectangle,
-        Circle,
-        Eclipse
     };
-
     static constexpr int noID = -1;
 
     class Polygon
@@ -34,9 +31,9 @@ namespace sgf
     public:
         template<typename ...Args>
         Polygon(Vertex vertex, Args ...args) noexcept 
-            :  m_ID{-1}, m_color{noColor}, m_outlineColor{noColor}, m_hasOutline{false}, 
-                m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, m_texture{nullptr}, 
-                m_text{nullptr}, m_shape{Shape::UserDefined}
+            :  m_ID{-1}, m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+            m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0}, 
+            m_outlineColor{noColor} 
         {
             m_vertices.push_back(vertex);
             m_vertices.insert(m_vertices.end(), { args... });
@@ -46,9 +43,9 @@ namespace sgf
         }
 
         Polygon() noexcept 
-            : m_ID{-1}, m_color{noColor}, m_outlineColor{noColor}, m_hasOutline{false}, 
-                m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, m_texture{nullptr}, 
-                m_text{nullptr}, m_shape{Shape::UserDefined}
+            : m_ID{-1}, m_color{noColor}, m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+            m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0},
+            m_outlineColor{noColor} 
         {}
 
         Polygon(float x, float y, float width, float height) noexcept;
@@ -90,8 +87,6 @@ namespace sgf
         void SetTransparency(bool transparency);
         void SetColor(Color color);
         void RemoveColor();
-        void SetOutline(Color color);
-        void RemoveOutline();
         void SetTexture(std::string path);
         void RemoveTexture();
         void SetTextureAlpha(int alpha);
@@ -101,11 +96,16 @@ namespace sgf
         void SetTextFontSize(int fontSize);
         void SetTextColor(Color color);
         void SetTextAlignment(int x, int y, int width, int height);
+        void ToggleOutline(bool toggle);
+        void SetOutlineSize(int size);
+        void SetOutlineColor(Color color);
 
         Vertex GetCenterCoords();
         int GetID() const;
         std::vector<Vertex>& GetVertices();
         Color& GetColor();
+        float GetHeight() const { return m_rectangleForm.h; };
+        float GetWidth() const { return m_rectangleForm.w; };
 
         [[nodiscard]]bool Clicked();
         void Move(float x, float y);
@@ -118,6 +118,7 @@ namespace sgf
         void FillTopTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
         void FillBottomTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
         void FillTriangle(SDL_Point v1, SDL_Point v2, SDL_Point v3);
+        void DrawOutline();
         int Determinant(int i, SDL_Point v);
         void SetRectangleForm();
         SDL_Point* GetVerticesArray();
@@ -128,9 +129,7 @@ namespace sgf
         int m_ID;
         std::vector<Vertex> m_vertices;
         Color m_color;
-        Color m_outlineColor;
 
-        bool m_hasOutline;
         bool m_isTransparent;
         bool m_isDeleted;
 
@@ -141,5 +140,9 @@ namespace sgf
         std::unique_ptr<Text> m_text;
 
         sgf::Shape m_shape;
+
+        int m_outlineSize;
+        Color m_outlineColor;
+        bool m_isOutlineActive;
     };
 }

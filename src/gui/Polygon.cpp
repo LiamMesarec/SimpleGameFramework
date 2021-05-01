@@ -8,21 +8,28 @@
 
 namespace sgf
 {
-
+    //RECTANGLE 
     Polygon::Polygon(float x, float y, float width, float height) noexcept 
+        :  m_ID{-1}, m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+        m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0}, 
+        m_outlineColor{noColor} 
     {
         m_vertices.reserve(5);
         m_vertices.emplace_back(sgf::Vertex{x, y});
         m_vertices.emplace_back(sgf::Vertex{x + width, y});
         m_vertices.emplace_back(sgf::Vertex{x + width, y + height});
-        m_vertices.emplace_back(sgf::Vertex{x, y + width});
+        m_vertices.emplace_back(sgf::Vertex{x, y + height});
         m_vertices.emplace_back(sgf::Vertex{x, y});
 
         m_ID = ObjectManager::NewObject(m_vertices);
         m_shape = Shape::Rectangle;
     }
 
+    //SQUARE
     Polygon::Polygon(float x, float y, float a) noexcept
+        :  m_ID{-1}, m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+        m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0}, 
+        m_outlineColor{noColor} 
     {
         m_vertices.reserve(5);
         m_vertices.emplace_back(sgf::Vertex{x, y});
@@ -43,6 +50,7 @@ namespace sgf
     void Polygon::SetVertex(std::size_t position, Vertex vertex)
     {
         m_vertices.at(position - 1) = vertex;
+        ObjectManager::UpdateObject(GetID(), m_vertices);
         SetRectangleForm();
     }
 
@@ -51,6 +59,7 @@ namespace sgf
         m_vertices.pop_back();
         m_vertices.push_back(vertex);
         m_vertices.push_back(m_vertices.at(0));
+        ObjectManager::UpdateObject(GetID(), m_vertices);
         SetRectangleForm();
     }
 
@@ -66,6 +75,7 @@ namespace sgf
         }
 
         SetRectangleForm();
+        ObjectManager::UpdateObject(GetID(), m_vertices);
     }
 
     std::vector<Vertex>& Polygon::GetVertices()
@@ -106,20 +116,10 @@ namespace sgf
         m_color = noColor;
     }
 
-    void Polygon::SetOutline(Color color)
-    {
-        m_hasOutline = true;
-        m_outlineColor = color;
-    }
-
-    void Polygon::RemoveOutline()
-    {
-        m_hasOutline = false;
-    }
-
     void Polygon::SetTexture(std::string path)
     {
         m_texture = std::make_unique<Texture>(path);
+        SetRectangleForm();
         m_texture->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
         m_texture->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
     }
@@ -138,6 +138,7 @@ namespace sgf
     void Polygon::SetText(std::string text, std::string font, int fontSize, Color color)
     {
         m_text = std::make_unique<Text>(text, font, fontSize, color);
+        SetRectangleForm();
         m_text->SetContainerSize(m_rectangleForm.w, m_rectangleForm.h);
         m_text->SetContainerPosition(m_rectangleForm.x, m_rectangleForm.y);
     }
@@ -166,6 +167,21 @@ namespace sgf
     void Polygon::SetTextFontSize(int fontSize)
     {
         m_text->SetFontSize(fontSize);
+    }
+
+    void Polygon::ToggleOutline(bool toggle)
+    {
+        m_isOutlineActive = toggle;
+    }
+
+    void Polygon::SetOutlineSize(int size)
+    {
+        m_outlineSize = size;
+    }
+
+    void Polygon::SetOutlineColor(Color color)
+    {
+        m_outlineColor = color;
     }
 
     int Polygon::GetID() const
@@ -254,6 +270,7 @@ namespace sgf
     {
         if(!m_isDeleted)
         {
+            ObjectManager::UpdateObject(GetID(), m_vertices);
             for(auto& vertex : m_vertices)
             {
                 vertex.x += x;
@@ -320,6 +337,18 @@ namespace sgf
                     );
                     Fill();
                 }
+                
+                if(m_isOutlineActive)
+                {
+                    SDL_SetRenderDrawColor(
+                        sgf::Engine::renderer,
+                        m_outlineColor.r,
+                        m_outlineColor.g,
+                        m_outlineColor.b,
+                        m_outlineColor.a
+                    );
+                    DrawOutline();
+                }
 
                 if(HasActiveTexture())
                 {   
@@ -331,20 +360,6 @@ namespace sgf
                     m_text->Draw(m_angle);
                 }
 
-            }
-
-            if(m_hasOutline)
-            {
-
-                SDL_SetRenderDrawColor(
-                    Engine::renderer,
-                    m_outlineColor.r,
-                    m_outlineColor.g,
-                    m_outlineColor.b,
-                    m_outlineColor.a
-                );
-
-                SDL_RenderDrawLines(Engine::renderer, vertices, m_vertices.size());
             }
             
             delete[] vertices;
@@ -363,14 +378,6 @@ namespace sgf
 
         const int numPoints = 2;
         SDL_Point points[numPoints];
-
-        SDL_SetRenderDrawColor(
-            sgf::Engine::renderer,
-            m_color.r,
-            m_color.g,
-            m_color.b,
-            m_color.a
-        );
 
         for(int y = v1.y; y <= v2.y; y++)
         {
@@ -394,15 +401,7 @@ namespace sgf
 
         const int numPoints = 2;
         SDL_Point points[numPoints];
-
-        SDL_SetRenderDrawColor(
-            sgf::Engine::renderer,
-            m_color.r,
-            m_color.g,
-            m_color.b,
-            m_color.a
-        );
-
+        
         for(int y = v3.y; y > v1.y; y--)
         {
             points[0] = {static_cast<int>(x1), y};
@@ -415,22 +414,28 @@ namespace sgf
 
     void Polygon::Fill()
     {
-        SDL_Point** triangles = new SDL_Point*[m_vertices.size() + 1];
-        SDL_Point centerCoords = {static_cast<int>(GetCenterCoords().x), static_cast<int>(GetCenterCoords().y)};
-
-        for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
+        /*if(m_shape == Shape::Square || m_shape == Shape::Rectangle)
         {
-            triangles[i] = new SDL_Point[2];
-            triangles[i][0] = {static_cast<int>(m_vertices.at(i).x), static_cast<int>(m_vertices.at(i).y)};
-            triangles[i][1] = {static_cast<int>(m_vertices.at(i + 1).x), static_cast<int>(m_vertices.at(i + 1).y)};
-        }
 
-        for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
+        }*/
         {
-            FillTriangle(triangles[i][0], triangles[i][1], {centerCoords.x, centerCoords.y});
-        }
+            SDL_Point** triangles = new SDL_Point*[m_vertices.size() + 1];
+            SDL_Point centerCoords = {static_cast<int>(GetCenterCoords().x), static_cast<int>(GetCenterCoords().y)};
 
-        delete[] triangles;
+            for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
+            {
+                triangles[i] = new SDL_Point[2];
+                triangles[i][0] = {static_cast<int>(m_vertices.at(i).x), static_cast<int>(m_vertices.at(i).y)};
+                triangles[i][1] = {static_cast<int>(m_vertices.at(i + 1).x), static_cast<int>(m_vertices.at(i + 1).y)};
+            }
+
+            for(std::size_t i = 0; i < m_vertices.size() - 1; i++)
+            {
+                FillTriangle(triangles[i][0], triangles[i][1], {centerCoords.x, centerCoords.y});
+            }
+
+            delete[] triangles;
+        }
     }
 
     //Based on "Software Rasterization Algorithms for Filling Triangles" by Bastian Molkenthin
@@ -464,6 +469,20 @@ namespace sgf
             FillTopTriangle(v1, v2, v4);
             FillBottomTriangle(v2, v4, v3);
         } 
+    }
+
+    void Polygon::DrawOutline()
+    {
+        SDL_Point points[2];
+        for(int i = 0; i < m_vertices.size(); i++)
+        {
+            for(int j = 0; j < m_outlineSize; j++)
+            {
+                points[0] = {static_cast<int>(m_vertices.at(i).x), static_cast<int>(m_vertices.at(i).y)};
+                points[1] = {static_cast<int>(m_vertices.at(i).x), static_cast<int>(m_vertices.at(i).y)};
+                SDL_RenderDrawLines(sgf::Engine::renderer, points, 2);
+            }
+        }
     }
 
     void Polygon::Delete()

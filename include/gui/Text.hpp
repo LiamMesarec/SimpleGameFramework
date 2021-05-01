@@ -13,7 +13,8 @@ namespace sgf
         Text(const std::string& text, const std::string& font, int fontSize, Color color);
         Text()
             : m_text{""}, m_font{""}, m_fontSize{0}, m_color{noColor},
-            m_fontPtr{nullptr}, m_texturePtr{nullptr}, m_alignmentRect{0, 0, 0, 0}, m_active{false} {}
+            m_fontPtr{nullptr}, m_texturePtr{nullptr}, m_rect{0, 0, 0, 0},
+            m_alignmentRect{0, 0, 0, 0}, m_active{false} {}
         ~Text();
         void SetText(const std::string& text);
         void SetFont(const std::string& font);

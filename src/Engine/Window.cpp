@@ -16,7 +16,9 @@ namespace sgf
             return;
         }
 
-        m_window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+        m_window = SDL_CreateWindow(
+            name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
+        );
 
         InitSDL();
     }
@@ -92,9 +94,9 @@ namespace sgf
             return;
         }
         SDL_SetRenderDrawColor(Engine::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_SetRenderDrawBlendMode(Engine::renderer, SDL_BLENDMODE_BLEND);
 
-        if(TTF_Init() < 0) {
+        if(TTF_Init() < 0) 
+        {
             error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
             return;
         }
