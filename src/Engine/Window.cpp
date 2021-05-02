@@ -43,6 +43,7 @@ namespace sgf
         TTF_Quit();
         Mix_Quit();
         SDL_Quit();
+        std::terminate();
     }
 
     void Window::SetBackgroundColor(Color color)

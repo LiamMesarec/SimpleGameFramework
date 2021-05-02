@@ -26,7 +26,8 @@ TicTacToeScene::TicTacToeScene([[maybe_unused]] sgf::SceneManagerPtr scene)
 
 TicTacToeScene::~TicTacToeScene()
 {
-
+    board.Delete();
+    title.Delete();
 }
 
 void TicTacToeScene::Render()
@@ -61,7 +62,7 @@ void TicTacToeScene::HandleInput()
 
                     if(WinningCombination(squares, Square::x))
                     {
-                        sgf::Engine::OpenScene<GameOverScene>(Result::WIN);
+                        sgf::Engine::OpenScene<GameOverScene>(Result::WIN, EScene::TICTACTOE);
                     } 
                     else
                     {
@@ -69,7 +70,7 @@ void TicTacToeScene::HandleInput()
                     }
                     if(WinningCombination(squares, Square::o))
                     {
-                        sgf::Engine::OpenScene<GameOverScene>(Result::LOSS);
+                        sgf::Engine::OpenScene<GameOverScene>(Result::LOSS, EScene::TICTACTOE);
                     }
 
                     for(int i = 0; i < 9; i++)
@@ -81,7 +82,7 @@ void TicTacToeScene::HandleInput()
                     }
                     if(draw)
                     {
-                        sgf::Engine::OpenScene<GameOverScene>(Result::DRAW);
+                        sgf::Engine::OpenScene<GameOverScene>(Result::DRAW, EScene::TICTACTOE);
                     }
                 }
             }

@@ -41,9 +41,12 @@ namespace sgf
 
     void Texture::Delete()
     {
-        SDL_DestroyTexture(m_texturePtr);
-        m_texturePtr = nullptr;
-        m_active = false;
+        if(m_active)
+        {
+            SDL_DestroyTexture(m_texturePtr);
+            m_texturePtr = nullptr;
+            m_active = false;
+        }
     }
 
     bool Texture::IsDeleted() const

@@ -11,7 +11,7 @@ namespace sgf
     Grid::~Grid()
     {
         Delete();
-        //delete[] m_polygons;
+        delete[] m_polygons;
     }
 
     Polygon* Grid::Square(int ID)

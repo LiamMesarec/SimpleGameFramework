@@ -2,7 +2,7 @@
 #include "TictactoeScene.hpp"
 #include "JumpScene.hpp"
 
-MainMenuScene::MainMenuScene(sgf::SceneManagerPtr scene)
+MainMenuScene::MainMenuScene([[maybe_unused]]sgf::SceneManagerPtr scene)
 {
     sgf::Camera::SetSceneSize(sgf::R_720P.width, sgf::R_720P.height);
     sgf::Camera::SetCameraSize(sgf::R_720P.width, sgf::R_720P.height);
@@ -17,7 +17,11 @@ MainMenuScene::MainMenuScene(sgf::SceneManagerPtr scene)
         sgf::Color{0, 0, 255});
     
     run.SetColor({255, 0, 0});
-    run.SetText("tictactoe", "fonts/HelveticaNeueLt.ttf", 50, 
+    run.SetText("run", "fonts/HelveticaNeueLt.ttf", 50, 
+        sgf::Color{0, 0, 255});
+
+    jump.SetColor({255, 0, 0});
+    jump.SetText("jump", "fonts/HelveticaNeueLt.ttf", 50, 
         sgf::Color{0, 0, 255});
 }
 

@@ -31,7 +31,7 @@ namespace sgf
     public:
         template<typename ...Args>
         Polygon(Vertex vertex, Args ...args) noexcept 
-            :  m_ID{-1}, m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+            : m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
             m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0}, 
             m_outlineColor{noColor} 
         {
@@ -43,7 +43,7 @@ namespace sgf
         }
 
         Polygon() noexcept 
-            : m_ID{-1}, m_color{noColor}, m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+            : m_color{noColor}, m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
             m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0},
             m_outlineColor{noColor} 
         {}
@@ -103,6 +103,7 @@ namespace sgf
         Vertex GetCenterCoords();
         int GetID() const;
         std::vector<Vertex>& GetVertices();
+        std::size_t GetNumberOfVertices() { return m_vertices.size(); }
         Color& GetColor();
         float GetHeight() const { return m_rectangleForm.h; };
         float GetWidth() const { return m_rectangleForm.w; };

@@ -10,7 +10,7 @@ namespace sgf
 {
     //RECTANGLE 
     Polygon::Polygon(float x, float y, float width, float height) noexcept 
-        :  m_ID{-1}, m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+        : m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
         m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0}, 
         m_outlineColor{noColor} 
     {
@@ -27,7 +27,7 @@ namespace sgf
 
     //SQUARE
     Polygon::Polygon(float x, float y, float a) noexcept
-        :  m_ID{-1}, m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
+        : m_color{noColor},  m_isTransparent{false}, m_isDeleted{false}, m_angle{0}, 
         m_texture{nullptr}, m_text{nullptr}, m_shape{Shape::UserDefined}, m_outlineSize{0}, 
         m_outlineColor{noColor} 
     {
@@ -44,13 +44,16 @@ namespace sgf
 
     Polygon::~Polygon()
     {
-        Delete();
+        if(!m_isDeleted)
+        {
+            Delete();
+        }
     }
 
     void Polygon::SetVertex(std::size_t position, Vertex vertex)
     {
-        m_vertices.at(position - 1) = vertex;
-        ObjectManager::UpdateObject(GetID(), m_vertices);
+        m_vertices.at(position) = vertex;
+        ObjectManager::UpdateObject(m_ID, m_vertices);
         SetRectangleForm();
     }
 
@@ -59,7 +62,7 @@ namespace sgf
         m_vertices.pop_back();
         m_vertices.push_back(vertex);
         m_vertices.push_back(m_vertices.at(0));
-        ObjectManager::UpdateObject(GetID(), m_vertices);
+        ObjectManager::UpdateObject(m_ID, m_vertices);
         SetRectangleForm();
     }
 
@@ -75,7 +78,6 @@ namespace sgf
         }
 
         SetRectangleForm();
-        ObjectManager::UpdateObject(GetID(), m_vertices);
     }
 
     std::vector<Vertex>& Polygon::GetVertices()
@@ -86,9 +88,9 @@ namespace sgf
     Vertex Polygon::GetCenterCoords()
     {
         float minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
-        Vertex* vertices = new Vertex[m_vertices.size()];
+        Vertex* vertices = new Vertex[m_vertices.size() - 1];
 
-        for (std::size_t i = 0; i < m_vertices.size(); i++) 
+        for (std::size_t i = 0; i < m_vertices.size() - 1; i++) 
         {
             vertices[i] = Vertex(m_vertices[i].x, m_vertices[i].y);
             if (vertices[i].x > maxX) maxX = vertices[i].x;
@@ -126,8 +128,11 @@ namespace sgf
 
     void Polygon::RemoveTexture()
     {
-        m_texture->Delete();
-        m_texture = nullptr;
+        if(m_texture)
+        {
+            m_texture->Delete();
+            m_texture = nullptr;
+        }
     }
 
     void Polygon::SetTextureAlpha(int alpha)
@@ -270,15 +275,14 @@ namespace sgf
     {
         if(!m_isDeleted)
         {
-            ObjectManager::UpdateObject(GetID(), m_vertices);
             for(auto& vertex : m_vertices)
             {
                 vertex.x += x;
                 vertex.y += y;
             }
+            ObjectManager::UpdateObjectPosition(m_ID, x, y);
+            SetRectangleForm();
         }
-        
-        SetRectangleForm();
     }
 
     void Polygon::Rotate(float degrees, bool antiClockwise)
@@ -474,7 +478,7 @@ namespace sgf
     void Polygon::DrawOutline()
     {
         SDL_Point points[2];
-        for(int i = 0; i < m_vertices.size(); i++)
+        for(std::size_t i = 0; i < m_vertices.size(); i++)
         {
             for(int j = 0; j < m_outlineSize; j++)
             {
@@ -487,23 +491,23 @@ namespace sgf
 
     void Polygon::Delete()
     {   
-
         if(!m_isDeleted)
         {
             ObjectManager::DeleteObject(m_ID);
-        }
-        
-        if(HasActiveTexture())
-        {
-            m_texture->Delete();
-        } 
+            
+            if(HasActiveTexture())
+            {
+                m_texture->Delete();
+            } 
 
-        if(HasActiveText())
-        {
-            m_text->Delete();
-        }
+            if(HasActiveText())
+            {
+                m_text->Delete();
+            }
 
-        m_vertices.clear(); 
+            m_vertices.clear(); 
+            m_isDeleted = true;
+        }
     }
 
     bool Polygon::IsDeleted() const 

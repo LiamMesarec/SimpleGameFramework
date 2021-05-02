@@ -14,9 +14,9 @@ public:
 
     enum Difficulty{EASY, MEDIUM, HARD};
 private:
-    sgf::Polygon title{400, 0, 200, 50};
-    sgf::Polygon tictactoe{300, 100, 200, 50};
-    sgf::Polygon run{300, 200, 200, 50};
-    sgf::Polygon jump{300, 200, 200, 50};
+    sgf::Polygon title{400, 0, 250, 60};
+    sgf::Polygon tictactoe{300, 100, 250, 60};
+    sgf::Polygon run{300, 200, 250, 60};
+    sgf::Polygon jump{300, 300, 250, 60};
 
 };

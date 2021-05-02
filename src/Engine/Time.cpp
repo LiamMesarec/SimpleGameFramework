@@ -1,5 +1,4 @@
 #include "../../include/engine/Time.hpp"
-#include <iostream>
 
 namespace sgf
 {
@@ -11,7 +10,6 @@ namespace sgf
     void Timer::End()
     {
         m_end = std::chrono::high_resolution_clock::now();
-        std::cout << "Timer took: " << std::chrono::duration_cast<std::chrono::milliseconds>(m_end - m_start).count() << " ms.\n";
     }
 
     void FPS::Start()
@@ -35,8 +33,6 @@ namespace sgf
         {
                 
         }
-
-        std::cout << "FPS: " << GetFPS() << '\n';
     }
 
     int FPS::GetFPS()
