@@ -1,4 +1,5 @@
 #include "../../include/engine/Time.hpp"
+#include <SDL2/SDL.h>
 
 namespace sgf
 {
@@ -39,5 +40,10 @@ namespace sgf
     {
         m_end = std::chrono::high_resolution_clock::now();
         return (1000.0f / static_cast<float>(std::chrono::duration_cast<std::chrono::milliseconds>((m_end - m_start)).count()));
+    }
+
+    void Delay(int ms)
+    {
+        SDL_Delay(ms);
     }
 }

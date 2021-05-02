@@ -73,9 +73,9 @@ void TicTacToeScene::HandleInput()
                         sgf::Engine::OpenScene<GameOverScene>(Result::LOSS, EScene::TICTACTOE);
                     }
 
-                    for(int i = 0; i < 9; i++)
+                    for(int j = 0; j < 9; j++)
                     {
-                        if(squares[i] == Square::none)
+                        if(squares[j] == Square::none)
                         {
                             draw = false;
                         }

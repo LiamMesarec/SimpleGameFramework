@@ -24,4 +24,6 @@ namespace sgf
         static inline std::chrono::time_point<std::chrono::system_clock> m_start, m_end;
         static inline int m_fpsLimit = 2000;
     };
+
+    void Delay(int ms);
 }

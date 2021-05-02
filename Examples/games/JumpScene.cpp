@@ -122,10 +122,12 @@ void JumpScene::Update()
         turtle.Move(0.5, 0);
         turtlePos++;
     }
+
     if(turtlePos == 0)
     {
         turtlePos = maxTurtleDirection;
     }
+    
     if(turtlePos <= maxTurtleDirection && turtlePos > 0)
     {
         turtle.RemoveTexture();
@@ -133,6 +135,7 @@ void JumpScene::Update()
         turtle.Move(-0.5, 0);
         turtlePos--;
     }
+
     if(turtlePos == 0)
     {
         turtlePos = -maxTurtleDirection;
