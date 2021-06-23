@@ -12,11 +12,8 @@ public:
     void Update() override;
     void HandleInput() override;
 
-    enum Difficulty{EASY, MEDIUM, HARD};
+    enum Menu{TICTACTOE, GAME, QUIT, SIZE};
 private:
-    sgf::Polygon title{400, 0, 250, 60};
-    sgf::Polygon tictactoe{300, 100, 250, 60};
-    sgf::Polygon run{300, 200, 250, 60};
-    sgf::Polygon jump{300, 300, 250, 60};
-
+    std::vector<sgf::Polygon*> menu;
+    sgf::Polygon backgroundPicture{0, 0, 1280, 720};
 };

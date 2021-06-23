@@ -13,9 +13,6 @@ TicTacToeScene::TicTacToeScene([[maybe_unused]] sgf::SceneManagerPtr scene)
     for(auto& square : board)
     {
         square.SetColor(sgf::Color{100, 0, 0});
-        square.ToggleOutline(true);
-        square.SetOutlineColor(sgf::Color{0, 0, 255});
-        square.SetOutlineSize(1);
     }
 
     title.SetColor(sgf::Color{100, 100, 100});

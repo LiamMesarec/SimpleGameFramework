@@ -341,6 +341,16 @@ namespace sgf
                     );
                     Fill();
                 }
+
+                if(HasActiveTexture())
+                {   
+                    m_texture->Draw(m_angle);
+                }
+
+                if(HasActiveText())
+                {   
+                    m_text->Draw(m_angle);
+                }
                 
                 if(m_isOutlineActive)
                 {
@@ -352,16 +362,6 @@ namespace sgf
                         m_outlineColor.a
                     );
                     DrawOutline();
-                }
-
-                if(HasActiveTexture())
-                {   
-                    m_texture->Draw(m_angle);
-                }
-
-                if(HasActiveText())
-                {   
-                    m_text->Draw(m_angle);
                 }
 
             }

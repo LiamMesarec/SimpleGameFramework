@@ -1,4 +1,6 @@
 #pragma once
+#include "../../include/SGF/Core.hpp"
+#include "../../include/SGF/Gui.hpp"
 
-enum Result{WIN, DRAW, LOSS};
-enum EScene{TICTACTOE, RUN, JUMP};
+enum class Result : int {WIN, DRAW, LOSS};
+enum class EScene : int {TICTACTOE, JUMP};

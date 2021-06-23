@@ -1,5 +1,7 @@
 # SimpleGameFramework
- 
+
+A simple library for building 2D games.
+
 Needs SDL, SDL Image, SDL TTF, SDL mixer to work.
 
 Compiled with: 

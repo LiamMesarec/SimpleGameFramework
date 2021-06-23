@@ -6,10 +6,12 @@ namespace sgf
     class Timer
     {
     public:
-        static void Start();
-        static void End();
+        void Start();
+        void End();
+        void SetTrigger(int ms);
+        bool Trigger();
     private:
-        static inline std::chrono::time_point<std::chrono::system_clock> m_start, m_end;
+        std::chrono::time_point<std::chrono::system_clock> m_start, m_end;
     };
 
     class FPS

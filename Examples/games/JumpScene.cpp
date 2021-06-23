@@ -3,6 +3,7 @@
 #include <memory>
 #include "GameOverScene.hpp"
 #include "Shared.hpp"
+#include "BossScene.hpp"
 
 JumpScene::JumpScene([[maybe_unused]] sgf::SceneManagerPtr scene)
 {   
@@ -11,10 +12,7 @@ JumpScene::JumpScene([[maybe_unused]] sgf::SceneManagerPtr scene)
     sgf::Window::SetBackgroundColor(sgf::Color{173, 216, 230, 0});
     sgf::FPS::SetFPSLimit(60);
 
-    title.SetText("Zanimiva igra...", "fonts/HelveticaNeueLt.ttf", 30, 
-        sgf::Color{255, 0, 0, 0});
-
-    for(int i = 0; auto& g : grass)
+    for(int i = 0; auto& g : gameInfo.floorTexture)
     {
         if(i >= 2 && i <= 4)
             g.SetTexture("textures/lava.png");
@@ -24,12 +22,22 @@ JumpScene::JumpScene([[maybe_unused]] sgf::SceneManagerPtr scene)
         i++;
     }
 
-    player.SetTexture("textures/player.png");
+    for(auto& h : gameInfo.healthTexture)
+    {
+        h.SetTexture("textures/heart.png");
+    }
+
+    for(auto& m : gameInfo.manaTexture)
+    {
+        m.SetTexture("textures/mana.png");
+    }
+
+    gameInfo.playerTexture.SetTexture("textures/player.png");
 
     for(int i = 0; i < numTiles; i++)
     {
         tiles.emplace_back(new sgf::Polygon{200.0f + i*100.0f, 550.0f - i*50.0f, 50, 50});
-        tiles[i]->SetColor({100, 0, 0});
+        tiles[i]->SetTexture("textures/tile.png");
         if(i == 2)
         {
             superJump.SetPosition(tiles[i]->GetVertices().at(0).x + 25, tiles[i]->GetVertices().at(0).y - 30);
@@ -37,8 +45,8 @@ JumpScene::JumpScene([[maybe_unused]] sgf::SceneManagerPtr scene)
     }
     superJump.SetTexture("textures/superJump.png");
     portal.SetTexture("textures/portal.png");
-    sun.SetTexture("textures/sun.png");
     turtle.SetTexture("textures/turtle.png");
+    gameInfo.backgroundTexture.SetTexture("textures/scene1background.png");
 }
 
 JumpScene::~JumpScene()
@@ -48,26 +56,22 @@ JumpScene::~JumpScene()
         tiles[i]->Delete();
         delete tiles[i];
     }
-
-    player.Delete();
-    title.Delete();
-    grass.Delete();
     portal.Delete();
-    sun.Delete();
     turtle.Delete();
     superJump.Delete();
 }
 
 void JumpScene::Render()
 {
-    player.Draw();  
-    title.Draw();
-    grass.Draw();
+    gameInfo.backgroundTexture.Draw();
+    gameInfo.playerTexture.Draw();  
+    gameInfo.floorTexture.Draw();
     portal.Draw();
-    sun.Draw();
     turtle.Draw();
     superJump.Draw();
-
+    gameInfo.healthTexture.Draw();
+    gameInfo.manaTexture.Draw();
+    
     for(int i = 0; i < numTiles; i++)
     {
         tiles[i]->Draw();
@@ -80,37 +84,37 @@ void JumpScene::Update()
     {
         Jump();
     }
-    else 
+    else if(!jumpingDown)
     {
-        player.Move(0, gravity);
+        gameInfo.playerTexture.Move(0, gameInfo.gravity);
     }
 
     for(int i = 0; i < numTiles; i++)
     {
-        sgf::ObjectCollision::CollisionNotAllowed(player, *tiles.at(i));
+        sgf::ObjectCollision::CollisionNotAllowed(gameInfo.playerTexture, *tiles.at(i));
     }
 
-    for(int i = 0; auto&& g : grass)
+    for(int i = 0; auto&& g : gameInfo.floorTexture)
     {
-        if(sgf::ObjectCollision::Collided(player, g))
+        if(sgf::ObjectCollision::Collided(gameInfo.playerTexture, g))
         {
             if(i >= 2 && i <= 4)
             {
                 sgf::Engine::OpenScene<GameOverScene>(Result::LOSS, EScene::JUMP);
             }
-            player.Move(0, -gravity);
+            gameInfo.playerTexture.Move(0, -gameInfo.gravity);
             break;
         }
 
         i++;
     }
 
-    if(sgf::ObjectCollision::Collided(player, portal))
+    if(sgf::ObjectCollision::Collided(gameInfo.playerTexture, portal))
     {
         sgf::Engine::OpenScene<GameOverScene>(Result::WIN, EScene::JUMP);
     }
 
-    if(sgf::ObjectCollision::Collided(player, turtle))
+    if(sgf::ObjectCollision::Collided(gameInfo.playerTexture, turtle))
     {
         sgf::Engine::OpenScene<GameOverScene>(Result::LOSS, EScene::JUMP);
     }
@@ -141,7 +145,7 @@ void JumpScene::Update()
         turtlePos = -maxTurtleDirection;
     }
 
-    if(sgf::ObjectCollision::Collided(player, superJump))
+    if(sgf::ObjectCollision::Collided(gameInfo.playerTexture, superJump))
     {
         superJump.RemoveTexture();
         jumpMaxHeight = 300;
@@ -157,11 +161,11 @@ void JumpScene::HandleInput()
         {
             if(sgf::EventManager::ActiveKey == sgf::Key::D)
             {
-                player.Move(3, 0);
+                gameInfo.playerTexture.Move(3, 0);
             }
             if(sgf::EventManager::ActiveKey == sgf::Key::A)
             {
-                player.Move(-3, 0);
+                gameInfo.playerTexture.Move(-3, 0);
             }
             if(sgf::EventManager::ActiveKey == sgf::Key::W)
             {
@@ -176,7 +180,7 @@ void JumpScene::Jump()
     if(jump_y < jumpMaxHeight && !jumpingDown)
     {
         jump_y += jumpSpeed;
-        player.Move(0, -jumpSpeed);
+        gameInfo.playerTexture.Move(0, -jumpSpeed);
     }
 
     if(jump_y >= jumpMaxHeight)
@@ -187,7 +191,7 @@ void JumpScene::Jump()
     if(jumpingDown)
     {
         jump_y -= jumpSpeed;
-        player.Move(0, jumpSpeed);
+        gameInfo.playerTexture.Move(0, jumpSpeed);
     }
 
     if(jump_y <= 0)

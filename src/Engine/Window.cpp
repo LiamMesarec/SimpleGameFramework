@@ -5,6 +5,7 @@
 #include "../../include/engine/Camera.hpp"
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include "../../include/Engine/Audio.hpp"
 
 namespace sgf 
 {
@@ -41,7 +42,10 @@ namespace sgf
         SDL_DestroyRenderer(Engine::renderer);
         SDL_DestroyWindow(m_window);     	
         TTF_Quit();
-        Mix_Quit();
+        if(Audio::IsEnabled())
+        {
+            Mix_Quit();
+        }
         SDL_Quit();
         std::terminate();
     }
@@ -101,11 +105,13 @@ namespace sgf
             error::GetSDLError<error::Type::TTF>("TTF failed to initialize");
             return;
         }
-
-        if(Mix_OpenAudio(44100, AUDIO_S16LSB, 2, 2048 ) < 0)
+        if(Audio::IsEnabled())
         {
-            error::GetSDLError<error::Type::MIXER>("Mixer failed to initialize");
-            return;
+            if(Mix_OpenAudio(44100, AUDIO_S16LSB, 2, 2048 ) < 0)
+            {
+                error::GetSDLError<error::Type::MIXER>("Mixer failed to initialize");
+                return;
+            }
         }
     }
 }

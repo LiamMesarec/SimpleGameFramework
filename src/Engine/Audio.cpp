@@ -36,59 +36,79 @@ namespace sgf
 
         void SetChannelVolume(std::size_t channelID, int volume)
         {
-            if(volume > 128) 
+            if(Audio::IsEnabled())
             {
-                volume = 128;
-            }
+                if(volume > 128) 
+                {
+                    volume = 128;
+                }
 
-            Mix_Volume(channelID, volume);
+                Mix_Volume(channelID, volume);
+            }
         }
     }
 
     void Audio::SetVolume(int volume)
     {
-        SetChannelVolume(-1, volume);
+        if(Audio::IsEnabled())
+        {
+            SetChannelVolume(-1, volume);
+        }
+    }
+
+    void Audio::Enable(bool enabled)
+    {
+        m_enabled = enabled;
     }
 
     void SoundEffect::Load(const std::string& path)
     {
-        if(m_path.length() > 1)
+        if(Audio::IsEnabled())
         {
-            Mix_FreeChunk(m_soundEffect);
-        }
+            if(m_path.length() > 1)
+            {
+                Mix_FreeChunk(m_soundEffect);
+            }
 
-        m_path = path;
-        m_soundEffect = nullptr;
-        m_soundEffect = Mix_LoadWAV(path.c_str());
+            m_path = path;
+            m_soundEffect = nullptr;
+            m_soundEffect = Mix_LoadWAV(path.c_str());
 
-        if(!m_soundEffect)
-        {
-            error::GetSDLError<error::Type::MIXER>("Cannot load sound effect");
+            if(!m_soundEffect)
+            {
+                error::GetSDLError<error::Type::MIXER>("Cannot load sound effect");
+            }
         }
     }
 
     void SoundEffect::Play()
     {
-        m_channelID = Mix_PlayChannel(-1, m_soundEffect, 0);
+        if(Audio::IsEnabled())
+        {
+            m_channelID = Mix_PlayChannel(-1, m_soundEffect, 0);
+        }
     }
 
     void Music::Load(const std::string& path)
     {
-        if(m_path.length() > 1)
+        if(Audio::IsEnabled())
         {
-            Mix_FreeMusic(m_music);
+            if(m_path.length() > 1)
+            {
+                Mix_FreeMusic(m_music);
+            }
+
+            m_path = path;
+            m_music = nullptr;
+            m_music = Mix_LoadMUS(path.c_str());
+
+            if(!m_music)
+            {
+                error::GetSDLError<error::Type::MIXER>("Cannot load music");
+            }
+
+            m_loop = 0;
         }
-
-        m_path = path;
-        m_music = nullptr;
-        m_music = Mix_LoadMUS(path.c_str());
-
-        if(!m_music)
-        {
-            error::GetSDLError<error::Type::MIXER>("Cannot load music");
-        }
-
-        m_loop = 0;
     }
 
     bool Music::IsPlaying()
@@ -113,46 +133,61 @@ namespace sgf
 
     void Music::Pause()
     {
-        PauseMusic();
+        if(Audio::IsEnabled())
+        {
+            PauseMusic();
+        }
     }
 
     void Music::Resume()
     {
-        ResumeMusic();
+        if(Audio::IsEnabled())
+        {
+            ResumeMusic();
+        }
     }
 
     void Music::Stop()
     {
-        StopMusic();
+        if(Audio::IsEnabled())
+        {
+            StopMusic();
+        }
     }
 
     void Playlist::Load(const std::string& path)
     {
-        std::string str;
-
-        m_tracks.clear();
-
-        for(std::string::size_type found; auto&& entry : std::filesystem::directory_iterator(path))
+        if(Audio::IsEnabled())
         {
-            str = entry.path().string();
+            std::string str;
 
-            found = str.find_first_of("\\");
-            while (found != std::string::npos)
+            m_tracks.clear();
+
+            for(std::string::size_type found; auto&& entry : std::filesystem::directory_iterator(path))
             {
-                str.at(found)='/';
-                found = std::string::npos;
+                str = entry.path().string();
+
+                found = str.find_first_of("\\");
+                while (found != std::string::npos)
+                {
+                    str.at(found)='/';
+                    found = std::string::npos;
+                }
+
+                m_tracks.push_back(str);
             }
 
-            m_tracks.push_back(str);
+            m_it = 0;
+            m_loop = 0;
         }
-
-        m_it = 0;
-        m_loop = 0;
     }
 
     void Playlist::Shuffle()
     {
-        std::random_shuffle(m_tracks.begin(), m_tracks.end());
+        if(Audio::IsEnabled())
+        {
+            std::random_shuffle(m_tracks.begin(), m_tracks.end());
+        }
     }
 
     void Playlist::Loop(int loop)
@@ -162,28 +197,37 @@ namespace sgf
 
     void Playlist::Play()
     {
-        if(m_it > 0 && m_it != m_tracks.size())
+        if(Audio::IsEnabled())
         {
-            Mix_FreeMusic(m_music);
-        }
+            if(m_it > 0 && m_it != m_tracks.size())
+            {
+                Mix_FreeMusic(m_music);
+            }
 
-        if(m_it != m_tracks.size())
-        {
-            m_music = nullptr;
-            m_music = Mix_LoadMUS(m_tracks.at(m_it).c_str());
-            m_channelID = Mix_PlayMusic(m_music, m_loop);
-            m_it++;
+            if(m_it != m_tracks.size())
+            {
+                m_music = nullptr;
+                m_music = Mix_LoadMUS(m_tracks.at(m_it).c_str());
+                m_channelID = Mix_PlayMusic(m_music, m_loop);
+                m_it++;
+            }
         }
     }
 
     void Playlist::Pause()
     {
-        PauseMusic();
+        if(Audio::IsEnabled())
+        {
+            PauseMusic();
+        }
     }
 
     void Playlist::Resume()
     {
-        ResumeMusic();
+        if(Audio::IsEnabled())
+        {
+            ResumeMusic();
+        }
     }
 
     bool Playlist::IsPlaying()
@@ -198,33 +242,48 @@ namespace sgf
 
     void Playlist::Update()
     {
-        if(!IsPlaying())
+        if(Audio::IsEnabled())
         {
-            if(m_it > 0 && m_it < m_tracks.size())
+            if(!IsPlaying())
             {
-                Play();
+                if(m_it > 0 && m_it < m_tracks.size())
+                {
+                    Play();
+                }
             }
         }
     }
 
     void Playlist::Stop()
     {
+        if(Audio::IsEnabled())
+        {
         StopMusic();
-        m_it = 0;
+            m_it = 0;
+        }
     }
 
     void Playlist::SetVolume(int volume)
     {
-        SetChannelVolume(m_channelID, volume);
+        if(Audio::IsEnabled())
+        {
+            SetChannelVolume(m_channelID, volume);
+        }
     }
 
     void Music::SetVolume(int volume)
     {
-        SetChannelVolume(m_channelID, volume);
+        if(Audio::IsEnabled())
+        {
+            SetChannelVolume(m_channelID, volume);
+        }
     }
 
     void SoundEffect::SetVolume(int volume)
     {
-        SetChannelVolume(m_channelID, volume);
+        if(Audio::IsEnabled())
+        {
+            SetChannelVolume(m_channelID, volume);
+        }
     }
 }

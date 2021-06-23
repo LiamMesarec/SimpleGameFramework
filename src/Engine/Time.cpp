@@ -13,6 +13,16 @@ namespace sgf
         m_end = std::chrono::high_resolution_clock::now();
     }
 
+    void Timer::SetTrigger(int ms)
+    {
+
+    }
+
+    bool Timer::Trigger()
+    {
+
+    }
+
     void FPS::Start()
     {
         m_start = std::chrono::high_resolution_clock::now();

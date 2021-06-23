@@ -10,6 +10,10 @@ namespace sgf
     {
     public:
         static void SetVolume(int volume);
+        static void Enable(bool enable);
+        static bool IsEnabled() { return m_enabled; }
+    private:
+        static inline bool m_enabled = true;
     };
 
     class SoundEffect

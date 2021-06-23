@@ -33,7 +33,6 @@ namespace sgf
 				float d = sqrtf(axisProj.x * axisProj.x + axisProj.y * axisProj.y);
 				axisProj = { axisProj.x / d, axisProj.y / d };
 
-				// Work out min and max 1D points for r1
 				float min_r1 = INFINITY, max_r1 = -INFINITY;
 				for (std::size_t p = 0; p < (obj1Vertices->size() - 1); p++)
 				{
@@ -42,7 +41,6 @@ namespace sgf
 					max_r1 = std::max(max_r1, q);
 				}
 
-				// Work out min and max 1D points for r2
 				float min_r2 = INFINITY, max_r2 = -INFINITY;
 				for (std::size_t p = 0; p < (obj2Vertices->size() - 1); p++)
 				{
@@ -86,11 +84,9 @@ namespace sgf
 				int b = (a + 1) % (obj1Vertices->size() - 1);
 				Vertex axisProj = { -(obj1Vertices->at(b).y - obj1Vertices->at(a).y), obj1Vertices->at(b).x - obj1Vertices->at(a).x };
 				
-				// Optional normalisation of projection axis enhances stability slightly
 				float d = sqrtf(axisProj.x * axisProj.x + axisProj.y * axisProj.y);
 				axisProj = { axisProj.x / d, axisProj.y / d };
 
-				// Work out min and max 1D points for r1
 				float min_r1 = INFINITY, max_r1 = -INFINITY;
 				for (std::size_t p = 0; p < (obj1Vertices->size() - 1); p++)
 				{
@@ -99,7 +95,6 @@ namespace sgf
 					max_r1 = std::max(max_r1, q);
 				}
 
-				// Work out min and max 1D points for r2
 				float min_r2 = INFINITY, max_r2 = -INFINITY;
 				for (std::size_t p = 0; p < (obj2Vertices->size() - 1); p++)
 				{
@@ -108,7 +103,6 @@ namespace sgf
 					max_r2 = std::max(max_r2, q);
 				}
 
-				// Calculate actual overlap along projected axis, and store the minimum
 				overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
 
 				if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
