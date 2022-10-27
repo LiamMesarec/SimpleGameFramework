@@ -1,4 +1,4 @@
-#include "../../include/input/Keyboard.hpp"
+#include "input/Keyboard.hpp"
 
 namespace sgf::input
 {

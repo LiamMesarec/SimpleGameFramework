@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include "Color.hpp"
-#include "../math/Vector.hpp"
+#include "math/Vector.hpp"
 
 namespace sgf
 {

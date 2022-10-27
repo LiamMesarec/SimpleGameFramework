@@ -1,5 +1,5 @@
-#include "../../include/input/Mouse.hpp"
-#include "../../include/engine/Camera.hpp"
+#include "input/Mouse.hpp"
+#include "engine/Camera.hpp"
 
 namespace sgf
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "../math/Vector.hpp"
+#include "math/Vector.hpp"
 #include <SDL2/SDL.h>
 
 namespace sgf

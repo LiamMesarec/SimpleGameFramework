@@ -2,9 +2,6 @@ libraries/
 debug/
 .vscode/
 fonts/
-scene2.cpp
-scene2.hpp
-TestScene.hpp
-TestScene.cpp
-main.cpp
 textures/
+Debug/
+compile_commands.json

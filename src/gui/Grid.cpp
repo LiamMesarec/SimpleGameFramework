@@ -1,4 +1,4 @@
-#include "../../include/gui/Grid.hpp"
+#include "gui/Grid.hpp"
 
 namespace sgf 
 {

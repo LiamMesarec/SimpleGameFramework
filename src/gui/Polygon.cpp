@@ -1,10 +1,11 @@
-#include "../../include/gui/Polygon.hpp"
-#include "../../include/input/Mouse.hpp"
+#include "gui/Polygon.hpp"
+#include "input/Mouse.hpp"
 #include <memory>
 #include <cmath>
-#include "../../include/math/Constants.hpp"
-#include "../../include/math/Functions.hpp"
-#include "../../include/engine/Time.hpp"
+#include "math/Constants.hpp"
+#include "math/Functions.hpp"
+#include "engine/Time.hpp"
+#include <algorithm>
 
 namespace sgf
 {

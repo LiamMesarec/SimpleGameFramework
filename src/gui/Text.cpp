@@ -1,7 +1,7 @@
-#include "../../include/gui/Text.hpp"
-#include "../../include/engine/Engine.hpp"
-#include "../../include/gui/Texture.hpp"
-#include "../../include/engine/Error.hpp"
+#include "gui/Text.hpp"
+#include "engine/Engine.hpp"
+#include "gui/Texture.hpp"
+#include "engine/Error.hpp"
 #include <iostream>
 
 namespace sgf

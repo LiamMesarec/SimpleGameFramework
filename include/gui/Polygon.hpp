@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
-#include "../math/Vector.hpp"
+#include "math/Vector.hpp"
 #include "Color.hpp"
 #include "Texture.hpp"
 #include <iostream>
-#include "../engine/Error.hpp"
-#include "../engine/Engine.hpp"
-#include "../engine/ObjectManager.hpp"
+#include "engine/Error.hpp"
+#include "engine/Engine.hpp"
+#include "engine/ObjectManager.hpp"
 #include "Text.hpp"
 
 namespace sgf

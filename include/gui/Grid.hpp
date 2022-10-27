@@ -1,7 +1,6 @@
 #pragma once
 #include "Polygon.hpp"
-#include "../math/Vector.hpp"
-#include <functional>
+#include "math/Vector.hpp"
 #include <memory>
 
 namespace sgf
